@@ -1,4 +1,4 @@
-package com.gus.supermarket;
+package com.gus.jama.supermarket;
 
 /**
  * Enumeration of the types of product we sell in our {@link Supermarket}.

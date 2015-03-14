@@ -1,4 +1,4 @@
-package com.gus.exec;
+package com.gus.deduplication;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 
 import com.google.gson.Gson;
-import com.gus.bean.Lead;
-import com.gus.bean.LeadArray;
 
 public class LeadsDeDup {
 	

@@ -1,4 +1,4 @@
-package com.gus.supermarket;
+package com.gus.jama.supermarket;
 
 import static org.junit.Assert.*;
 

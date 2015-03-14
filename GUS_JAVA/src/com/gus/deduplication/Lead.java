@@ -1,4 +1,4 @@
-package com.gus.bean;
+package com.gus.deduplication;
 
 import java.io.Serializable;
 import java.text.ParseException;

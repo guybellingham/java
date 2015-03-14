@@ -1,4 +1,4 @@
-package com.gus.supermarket;
+package com.gus.jama.supermarket;
 
 import java.util.ArrayList;
 import java.util.List;
