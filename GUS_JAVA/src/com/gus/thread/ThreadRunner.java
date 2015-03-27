@@ -5,7 +5,16 @@ import java.util.Random;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
+/**
+ * 
+ * The Java 'volatile' keyword guarantees visibility of changes to variables across threads. 
+ * That is once one thread has made a change to the variable it is 'flushed' from CPU caches 
+ * and written back out to the Main Memory so that other threads can 'read' the new value. 
+ * However with 2 threads both reading and writing to a shared variable, volatile is not enough, 
+ * the read and write methods must also be synchronized to prevent 'race' conditions.    
+ * @author Gus
+ *
+ */
 public class ThreadRunner {
 	
 	private static final Logger logger = LogManager.getLogger(ThreadRunner.class);
@@ -25,12 +34,12 @@ public class ThreadRunner {
 		
 //		startConsolePrinters();
 		
-		startWaitingConsolePrinters();
+//		startWaitingConsolePrinters();
 		
-		startTickTockPrinters();
+//		startTickTockPrinters();
+		
+		startProducerAndConsumer();
 	}
-	
-
 	
 	public static void startConsolePrinters() {
 		ConsolePrinter printer1 = new ConsolePrinter('.');
@@ -110,6 +119,17 @@ public class ThreadRunner {
 		}
 	}
 
+	public static void startProducerAndConsumer() {
+		MonitorObject monitor = new MonitorObject();
+		Producer producer = new Producer(monitor);
+		Consumer consumer = new Consumer(monitor);
+		Thread thread1 = new Thread(producer,"ProducerThread");
+		Thread thread2 = new Thread(consumer,"ConsumerThread");
+		logger.debug("Starting thread ProducerThread");
+		thread1.start();
+		logger.debug("Starting thread ConsumerThread");
+		thread2.start();
+	}
 	public static void startPrimeSievePrinters() {
 
 		//You don't want to have 2 Threads trying to run the same instance of PrimeSieve 
