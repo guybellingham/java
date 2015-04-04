@@ -10,8 +10,31 @@
 	<classpathentry kind="lib" path="lib/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/dozer-5.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.2-adapters.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.2-api.jar"/>
+	<classpathentry kind="lib" path="lib/geocoder-java-0.16.jar" sourcepath="lib/geocoder-java-0.16-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Guy/Documents/GitHub/java/GUS_JAVA/lib/geocoder-java-0.16-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/gson-2.3.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Guy/Documents/GitHub/java/GUS_JAVA/lib/gson-2.3.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/hibernate-core-4.3.6.Final.jar"/>
+	<classpathentry kind="lib" path="lib/javassist.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/org.osgi.core-4.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.11.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Guy/Documents/GitHub/java/GUS_JAVA/lib/poi-3.11-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

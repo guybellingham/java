@@ -1,11 +1,11 @@
 package com.gus.nio;
 
-import static java.nio.file.StandardOpenOption.*;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FilePermission;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -20,9 +20,6 @@ import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,10 +37,17 @@ public final class FileServicesImpl {
 	    Path path = Paths.get(filename);
 	    return Files.readAllBytes(path);
 	}
-	
-	public List<String> readSmallTextFile(String filename) throws IOException {
+	public List<String>  readSmallAsciiTextFile(String filename) throws IOException {
+		Charset charset = Charset.forName("US-ASCII");
+		return readTextFile(filename, charset);
+	}
+	public List<String>  readSmallUtf8TextFile(String filename) throws IOException {
+		Charset charset = Charset.forName("UTF-8");
+		return readTextFile(filename, charset);
+	}
+	public List<String> readSmallTextFile(String filename,Charset charset) throws IOException {
 	    Path path = Paths.get(filename);
-	    return Files.readAllLines(path);
+	    return Files.readAllLines(path,charset);
 	}
 	/**
 	 * Overwrites the given file with the given data.  
