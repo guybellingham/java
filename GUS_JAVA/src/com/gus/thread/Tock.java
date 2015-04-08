@@ -1,17 +1,21 @@
 package com.gus.thread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
+/**
+ * Tick will wait for Tock but not the other way around!
+ * @author Guy
+ *
+ */
 public class Tock implements Runnable {
 	
 	private static final Logger logger = LogManager.getLogger(Tock.class);
 	
-	public Tock(LockObject lockObject) {
-		setLockObject(lockObject);
+	public Tock(Semaphore semaphore) {
+		setLockObject(semaphore);
 	}
 	private boolean finished; 
 	
-	private LockObject lockObject;
+	private Semaphore semaphore;
 	
 	@Override
 	public void run() {
@@ -22,28 +26,15 @@ public class Tock implements Runnable {
 		}
 
         while (!finished) {
-        	//take the lock
-        	synchronized(lockObject) {
-        		while(! lockObject.isWait()){
-        			try {
-						lockObject.wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-        		}
-        		//print
-        		System.out.print("tock ");
-        		try {
-    				Thread.sleep(500);
-    			} catch (InterruptedException e) {
-    				e.printStackTrace();
-    			}
-        		lockObject.setWait(false);  	//make me wait my turn again
-        		lockObject.notify();		//notify other Threads who may be waiting
-        	}
-        	
-		}
-        
+        	semaphore.release();  
+        	//print
+    		System.out.print("tock ");
+    		try {
+				Thread.sleep(1000);    //Tock must wait longer than Tick
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} 
         
 	}
 
@@ -55,12 +46,12 @@ public class Tock implements Runnable {
 		this.finished = finished;
 	}
 
-	public LockObject getLockObject() {
-		return lockObject;
+	public Semaphore getLockObject() {
+		return semaphore;
 	}
 
-	public void setLockObject(LockObject lockObject) {
-		this.lockObject = lockObject;
+	public void setLockObject(Semaphore semaphore) {
+		this.semaphore = semaphore;
 	}
 
 }

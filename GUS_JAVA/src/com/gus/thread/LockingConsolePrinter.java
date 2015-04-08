@@ -6,14 +6,14 @@ public class LockingConsolePrinter implements Runnable {
 	
 	private static final Logger logger = LogManager.getLogger(LockingConsolePrinter.class);
 	
-	public LockingConsolePrinter(char character, LockObject lockObject) {
+	public LockingConsolePrinter(char character, SimpleLock lock) {
 		setCharacter(character);
-		setLockObject(lockObject);
+		setLock(lock);
 	}
 	private boolean finished; 
 	private char character;
 	
-	private LockObject lockObject;
+	private SimpleLock lock;
 	
 	@Override
 	public void run() {
@@ -25,12 +25,17 @@ public class LockingConsolePrinter implements Runnable {
 
         while (!finished) {
         	//take the lock
-        	synchronized(lockObject) {
+        	try {
+        		lock.lock();
         		//print
         		System.out.print(getCharacter());
+        		
+        	} catch (InterruptedException e) {
+				e.printStackTrace();
+			} finally {
+        		lock.unlock();    //ALWAYS unlock
         	}
-        	//yield and sleep
-        	Thread.yield();
+        	//sleep
         	try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -61,12 +66,12 @@ public class LockingConsolePrinter implements Runnable {
 		this.finished = finished;
 	}
 
-	public LockObject getLockObject() {
-		return lockObject;
+	public SimpleLock getLock() {
+		return lock;
 	}
 
-	public void setLockObject(LockObject lockObject) {
-		this.lockObject = lockObject;
+	public void setLock(SimpleLock lock) {
+		this.lock = lock;
 	}
 
 }

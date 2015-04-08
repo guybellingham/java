@@ -1,7 +1,8 @@
-package com.gus.threads;
+package com.gus.thread;
 
 public class CountingRunnable implements Runnable {
 	private long count = 0, max = 30;
+	private boolean finished = false;
 	
 	public CountingRunnable() {
 		
@@ -13,15 +14,16 @@ public class CountingRunnable implements Runnable {
 	@Override
 	public void run() {
 		do {
-		System.out.print(count++);
-		try {
-			Thread.sleep(1000);
-		} catch(InterruptedException e) {
-			if(Thread.interrupted()) {
-				throw new Error("I was interrupted! e="+e);
+			System.out.print(count++);
+			System.out.print(',');
+			try {
+				Thread.sleep(500);
+			} catch(InterruptedException e) {
+				if(Thread.interrupted()) {
+					throw new Error("I was interrupted! e="+e);
+				}
 			}
-		}
-		} while(count < 61);
+		} while(!isFinished() && count<max);
 	}
 	public long getCount() {
 		return count;
@@ -34,6 +36,12 @@ public class CountingRunnable implements Runnable {
 	}
 	public void setMax(long max) {
 		this.max = max;
+	}
+	public boolean isFinished() {
+		return finished;
+	}
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 
 }

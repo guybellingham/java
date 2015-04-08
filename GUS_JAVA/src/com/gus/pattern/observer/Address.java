@@ -157,4 +157,9 @@ public class Address extends Observable {
 		sb.append(".");
 		return sb.toString();
 	}
+	public String getLatLongTuple() {
+		String lat = latitude!=null?latitude.toPlainString():"";
+		String lng = longitude!=null?longitude.toPlainString():"";
+		return lat+','+lng;
+	}
 }

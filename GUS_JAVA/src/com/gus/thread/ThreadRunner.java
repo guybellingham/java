@@ -2,6 +2,8 @@ package com.gus.thread;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -32,15 +34,48 @@ public class ThreadRunner {
 		};
 		Thread.setDefaultUncaughtExceptionHandler(eh);
 		
-//		startConsolePrinters();
+//		startCountingPrinters();
+		
+//		startConsolePrinters(); 
 		
 //		startWaitingConsolePrinters();
 		
 //		startTickTockPrinters();
 		
-		startProducerAndConsumer();
+//		startProducerAndConsumer();
 	}
 	
+	/**
+	 * Something 'funny' happens when 2 Threads share the same Runnable?  
+	 */
+	public static void startCountingPrinters() {
+		CountingRunnable run1 = new CountingRunnable();
+
+		Thread thread1 = new Thread(run1,"Count1Thread");
+		//thread1.setPriority (Thread.NORM_PRIORITY + 1); 
+		Thread thread2 = new Thread(run1,"Count2Thread");
+		logger.debug("Starting thread Count1");
+		thread1.start();
+		logger.debug("Starting thread Count2");
+		thread2.start();
+		try
+	      {
+	          Thread.sleep (10000);
+	      }
+	      catch (InterruptedException e)
+	      {
+	      }
+		run1.setFinished (true);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Even when Threads don't share the same Runnable there is 
+	 * no guarantee about the order in which they execute!
+	 */
 	public static void startConsolePrinters() {
 		ConsolePrinter printer1 = new ConsolePrinter('.');
 		ConsolePrinter printer2 = new ConsolePrinter('+');
@@ -66,9 +101,12 @@ public class ThreadRunner {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Even when 2 Threads use the same 'lock' things can still get out of order. 
+	 * The lock only guarantees that the 2 Threads won't write at the same time. 
+	 */
 	public static void startWaitingConsolePrinters() {
-		LockObject lock = new LockObject();
+		SimpleLock lock = new SimpleLock();
 		LockingConsolePrinter printer1 = new LockingConsolePrinter('<',lock);
 		LockingConsolePrinter printer2 = new LockingConsolePrinter('>',lock);   
 		Thread thread1 = new Thread(printer1,"Locking1Thread");
@@ -94,13 +132,18 @@ public class ThreadRunner {
 	}
 	
 	public static void startTickTockPrinters() {
-		LockObject lock = new LockObject();
+		Semaphore lock = new Semaphore();
 		Tick tick = new Tick(lock);
 		Tock tock = new Tock(lock);
 		Thread thread1 = new Thread(tick,"TickThread");
 		Thread thread2 = new Thread(tock,"TockThread");
 		logger.debug("Starting thread TickThread");
 		thread1.start();
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		logger.debug("Starting thread TockThread");
 		thread2.start();
 		try
@@ -120,16 +163,31 @@ public class ThreadRunner {
 	}
 
 	public static void startProducerAndConsumer() {
-		MonitorObject monitor = new MonitorObject();
-		Producer producer = new Producer(monitor);
-		Consumer consumer = new Consumer(monitor);
+//		MonitorObject monitor = new MonitorObject();
+		BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(5);
+		Producer producer = new Producer(queue);
+		Consumer consumer = new Consumer(queue);
 		Thread thread1 = new Thread(producer,"ProducerThread");
-		Thread thread2 = new Thread(consumer,"ConsumerThread");
+		Thread thread2 = new Thread(consumer,"ConsumerThread1");
+		Thread thread3 = new Thread(consumer,"ConsumerThread2");
 		logger.debug("Starting thread ProducerThread");
 		thread1.start();
-		logger.debug("Starting thread ConsumerThread");
+		logger.debug("Starting thread ConsumerThread1");
 		thread2.start();
+		logger.debug("Starting thread ConsumerThread2");
+		thread3.start();
+		try
+	      {
+	          Thread.sleep (30000);
+	      }
+	      catch (InterruptedException e)
+	      {
+	      }
+		producer.setFinished(true);
+		consumer.setFinished(true);
+		logger.debug("Finished!"); 
 	}
+	
 	public static void startPrimeSievePrinters() {
 
 		//You don't want to have 2 Threads trying to run the same instance of PrimeSieve 
