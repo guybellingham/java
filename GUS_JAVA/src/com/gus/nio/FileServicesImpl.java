@@ -28,50 +28,80 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-public final class FileServicesImpl {
+public final class FileServicesImpl implements FileServices {
 
 	private static final Logger logger = LogManager.getLogger(FileServicesImpl.class);
 	private int bufferSize = 4096;   //4K
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readSmallBinaryFile(java.lang.String)
+	 */
+	@Override
 	public byte[] readSmallBinaryFile(String filename) throws IOException {
 	    Path path = Paths.get(filename);
 	    return Files.readAllBytes(path);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readSmallAsciiTextFile(java.lang.String)
+	 */
+	@Override
 	public List<String>  readSmallAsciiTextFile(String filename) throws IOException {
 		Charset charset = Charset.forName("US-ASCII");
 		return readTextFile(filename, charset);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readSmallUtf8TextFile(java.lang.String)
+	 */
+	@Override
 	public List<String>  readSmallUtf8TextFile(String filename) throws IOException {
 		Charset charset = Charset.forName("UTF-8");
 		return readTextFile(filename, charset);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readSmallTextFile(java.lang.String, java.nio.charset.Charset)
+	 */
+	@Override
 	public List<String> readSmallTextFile(String filename,Charset charset) throws IOException {
 	    Path path = Paths.get(filename);
 	    return Files.readAllLines(path,charset);
 	}
-	/**
-	 * Overwrites the given file with the given data.  
-	 * @param filename
-	 * @param data
-	 * @throws IOException
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#writeSmallBinaryFile(java.lang.String, byte[])
 	 */
+	@Override
 	public Path writeSmallBinaryFile(String filename, byte[] data) throws IOException {
 	    Path path = Paths.get(filename);
 	    return writeSmallBinaryFile(path,data);
 	}   
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#writeSmallBinaryFile(java.nio.file.Path, byte[])
+	 */
+	@Override
 	public Path writeSmallBinaryFile(Path path, byte[] data) throws IOException {
 	    //StandardOpenOption.CREATE TRUNCATE_EXISTING are the defaults here!
 	    return Files.write(path, data); //creates, overwrites
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#appendToFile(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public int appendToFile(String filename, String text) throws IOException {
 		Path path = Paths.get(filename);
 		return appendToFile(path,text.getBytes());   //default Charset!
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#appendToFile(java.lang.String, byte[])
+	 */
+	@Override
 	public int appendToFile(String filename, byte[] data) throws IOException {
 		Path path = Paths.get(filename);
 		return appendToFile(path,data);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#appendToFile(java.nio.file.Path, byte[])
+	 */
+	@Override
 	public int appendToFile(Path path, byte[] data) throws IOException {
 		ByteBuffer byteBuffer = ByteBuffer.wrap(data); 
 		Set<OpenOption> options = new HashSet<OpenOption>();
@@ -86,18 +116,34 @@ public final class FileServicesImpl {
 	    }
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readAsciiTextFile(java.lang.String)
+	 */
+	@Override
 	public List<String>  readAsciiTextFile(String filename) throws IOException {
 		Charset charset = Charset.forName("US-ASCII");
 		return readTextFile(filename, charset);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readUtf8TextFile(java.lang.String)
+	 */
+	@Override
 	public List<String>  readUtf8TextFile(String filename) throws IOException {
 		Charset charset = Charset.forName("UTF-8");
 		return readTextFile(filename, charset);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readTextFile(java.lang.String, java.nio.charset.Charset)
+	 */
+	@Override
 	public List<String>  readTextFile(String filename, Charset charset) throws IOException {
 		Path path = Paths.get(filename);
 		return readTextFile(path, charset);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readTextFile(java.nio.file.Path, java.nio.charset.Charset)
+	 */
+	@Override
 	public List<String>  readTextFile(Path path, Charset charset) throws IOException {
 		List<String> output = new ArrayList<String>(); 
 		try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
@@ -112,10 +158,18 @@ public final class FileServicesImpl {
 		return output;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readLargeBinaryFile(java.lang.String)
+	 */
+	@Override
 	public byte[] readLargeBinaryFile(String filename) throws IOException {
 		Path path = Paths.get(filename);
 		return readLargeBinaryFile(path);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readLargeBinaryFile(java.nio.file.Path)
+	 */
+	@Override
 	public byte[] readLargeBinaryFile(Path path) throws IOException {
 		ByteBuffer byteBuffer = null;
 		ByteArrayOutputStream bytesOut = null;
@@ -163,16 +217,10 @@ public final class FileServicesImpl {
 	}
 	
 
-	/**
-	 * <p>A region of a file may be mapped into memory in one of three modes (read, read/write and private),
-	 *  this method uses (MapMode.READ_ONLY): 
-	 *  Any attempt to modify the resulting buffer will cause a ReadOnlyBufferException to be thrown.
-	 * <p>For most operating systems, mapping a file into memory is more expensive than reading or writing 
-	 * a few tens of kilobytes of data via the usual read and write methods. From the standpoint of performance
-	 *  it is generally only worth mapping relatively LARGE files >50K into memory. 
-	 * @param filename
-	 * @return String containing the contents of the text file or an empty String if an error occurred
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#readLargeTextFile(java.lang.String)
 	 */
+	@Override
 	public String readLargeTextFile(String filename) throws IOException { 
 		RandomAccessFile bigFile = null;
 		MappedByteBuffer byteBuffer = null;
@@ -218,6 +266,10 @@ public final class FileServicesImpl {
         return sb.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#createFile(java.lang.String)
+	 */
+	@Override
 	public Path createFile(String filename) throws IOException {
 		Path path = Paths.get(filename);
 		try {
@@ -234,16 +286,17 @@ public final class FileServicesImpl {
 		return path;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#createTempFile(java.lang.String)
+	 */
+	@Override
 	public Path createTempFile(String filename) throws IOException {
 		return createTempFile(filename, ".temp");
 	}
-	/**
-	 * Create a temporary file in the default 'temp' directory for this OS.
-	 * @param filename
-	 * @param extension - ".txt", ".log" ..etc
-	 * @throws IOException
-	 * @return Path to the new temp file
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#createTempFile(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Path createTempFile(String filename, String extension) throws IOException {
 		//UNIX stuff
 //		Set<PosixFilePermission> perms =
@@ -265,10 +318,18 @@ public final class FileServicesImpl {
 		return pathToFile;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#deleteFile(java.lang.String)
+	 */
+	@Override
 	public boolean deleteFile(String filename) throws IOException {
 		Path path = Paths.get(filename);
 		return deleteFile(path);
 	}
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#deleteFile(java.nio.file.Path)
+	 */
+	@Override
 	public boolean deleteFile(Path path) throws IOException {
 		boolean rc = false;
 		try {
@@ -281,16 +342,28 @@ public final class FileServicesImpl {
 		return rc;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#fileExists(java.lang.String)
+	 */
+	@Override
 	public boolean fileExists(String filename) throws IOException {
 		Path path = Paths.get(filename);
 		boolean rc = Files.exists(path, LinkOption.NOFOLLOW_LINKS);
 		return rc;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#getBufferSize()
+	 */
+	@Override
 	public int getBufferSize() {
 		return bufferSize;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gus.nio.FileServices#setBufferSize(int)
+	 */
+	@Override
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
 	}

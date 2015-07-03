@@ -32,7 +32,7 @@ public class FileServicesTest {
 
 	@Test
 	public void testReadAsciiFile() {
-		FileServicesImpl fileServices = new FileServicesImpl();
+		FileServices fileServices = new FileServicesImpl();
 		try {
 			logger.debug("testReadAsciiFile reading "+ASCII_FILENAME);
 			List<String> contents = fileServices.readAsciiTextFile(ASCII_FILENAME);
@@ -45,7 +45,7 @@ public class FileServicesTest {
 
 	@Test
 	public void testReadLargeBinaryFile() {
-		FileServicesImpl fileServices = new FileServicesImpl();
+		FileServices fileServices = new FileServicesImpl();
 		try {
 			logger.debug("testReadLargeBinaryFile reading "+BINARY_FILENAME);
 			byte[] contents = fileServices.readLargeBinaryFile(BINARY_FILENAME);
@@ -58,7 +58,7 @@ public class FileServicesTest {
 	
 	@Test
 	public void testReadLargeTextFile() {
-		FileServicesImpl fileServices = new FileServicesImpl();
+		FileServices fileServices = new FileServicesImpl();
 		try {
 			logger.debug("testReadLargeTextFile reading "+ASCII_FILENAME);
 			String contents = fileServices.readLargeTextFile(ASCII_FILENAME);
@@ -71,7 +71,7 @@ public class FileServicesTest {
 	
 	@Test
 	public void testCreateWriteDeleteTempFile() {
-		FileServicesImpl fileServices = new FileServicesImpl();
+		FileServices fileServices = new FileServicesImpl();
 		Path path = null;
 		try {
 			path = fileServices.createTempFile("JUnit", ".dat");

@@ -43,17 +43,17 @@ public class Address extends Observable {
 
 	private String address1, address2, townOrCity, stateOrRegion, countryName, postalOrZipCode;
 	private BigDecimal latitude, longitude;
-	private boolean partialGeocoderMatch; 
+	private boolean needsGeocoding, partialGeocoderMatch; 
 	private TimeZone timeZone;
 	
 	/**
-	 * JavaBeans constructor.
+	 * DO NOT USE. JavaBeans constructor for TEST.
 	 */
 	public Address() {
-		
 	}
+	
 	/**
-	 * Construct a new (immutable) Address. 
+	 * Construct a new (immutable) Address without a Lat/Long or TimeZone. 
 	 * @param address1 - REQUIRED 
 	 * @param address2 - OPTIONAL
 	 * @param townOrCity - REQUIRED
@@ -62,6 +62,23 @@ public class Address extends Observable {
 	 * @param postalCode - OPTIONAL
 	 */
 	public Address(String address1,String address2,String townOrCity,String stateOrRegion,String countryName,String postalCode) {
+		this(address1,address2,townOrCity,stateOrRegion,countryName,postalCode,null,null,null);
+	}
+	/**
+	 * Construct a new (immutable) Address
+	 * @param address1 - REQUIRED
+	 * @param address2 - OPTIONAL
+	 * @param townOrCity - REQUIRED
+	 * @param stateOrRegion - REQUIRED
+	 * @param countryName - REQUIRED
+	 * @param postalCode - OPTIONAL
+	 * @param lat - OPTIONAL
+	 * @param lng - OPTIONAL
+	 * @param timezone - OPTIONAL
+	 */
+	public Address(String address1,String address2,String townOrCity,
+			String stateOrRegion,String countryName,String postalCode,
+			BigDecimal lat,BigDecimal lng,TimeZone timezone) {
 		assert(null!=address1 && !address1.isEmpty());
 		assert(null!=townOrCity && !townOrCity.isEmpty());
 		assert(null!=stateOrRegion && !stateOrRegion.isEmpty());
@@ -72,8 +89,10 @@ public class Address extends Observable {
 		setStateOrRegion(stateOrRegion);
 		setCountryName(countryName);
 		setPostalOrZipCode(postalCode);
+		setLatitude(lat);
+		setLongitude(lng);
+		setTimeZone(timezone);
 	}
-	
 
 	public String getAddress1() {
 		return address1;
@@ -161,5 +180,11 @@ public class Address extends Observable {
 		String lat = latitude!=null?latitude.toPlainString():"";
 		String lng = longitude!=null?longitude.toPlainString():"";
 		return lat+','+lng;
+	}
+	public boolean isNeedsGeocoding() {
+		return needsGeocoding;
+	}
+	public void setNeedsGeocoding(boolean needsGeocoding) {
+		this.needsGeocoding = needsGeocoding;
 	}
 }
