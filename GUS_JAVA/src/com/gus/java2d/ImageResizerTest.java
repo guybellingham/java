@@ -35,9 +35,9 @@ public class ImageResizerTest {
 			}
 			InputStream joker = getInputImageStream("com/gus/java2d/joker-2048.jpg");
 			if(joker != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(joker); 
-				BufferedImage scaledBuffer = ImageResizer.getScaledImage(buffer, 60, 60);
-				ImageResizer.writeBufferedImage(scaledBuffer, FORMAT_JPEG, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(joker); 
+				BufferedImage scaledBuffer = ImageUtil.getScaledImage(buffer, 60, 60);
+				ImageUtil.writeBufferedImage(scaledBuffer, FORMAT_JPEG, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -55,9 +55,9 @@ public class ImageResizerTest {
 			}
 			InputStream joker = getInputImageStream("com/gus/java2d/joker-2048.jpg");
 			if(joker != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(joker); 
-				BufferedImage scaledBuffer = ImageResizer.getScaledInstance(buffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
-				ImageResizer.writeJpeg(scaledBuffer, outputFile, 0.95F);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(joker); 
+				BufferedImage scaledBuffer = ImageUtil.shrinkImage(buffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+				ImageUtil.writeJpeg(scaledBuffer, outputFile, 0.95F);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -75,10 +75,10 @@ public class ImageResizerTest {
 			}
 			InputStream joker = getInputImageStream("com/gus/java2d/joker-2048.jpg");
 			if(joker != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(joker); 
-				BufferedImage croppedBuffer = ImageResizer.getCroppedImage(buffer, 1366, 1366, CropMethod.TOP_CENTER);
-				BufferedImage scaledBuffer = ImageResizer.getScaledImage(croppedBuffer, 60, 60);
-				ImageResizer.writeBufferedImage(scaledBuffer, FORMAT_JPEG, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(joker); 
+				BufferedImage croppedBuffer = ImageUtil.getCroppedImage(buffer, 1366, 1366, CropMethod.TOP_CENTER);
+				BufferedImage scaledBuffer = ImageUtil.getScaledImage(croppedBuffer, 60, 60);
+				ImageUtil.writeBufferedImage(scaledBuffer, FORMAT_JPEG, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -96,10 +96,10 @@ public class ImageResizerTest {
 			}
 			InputStream joker = getInputImageStream("com/gus/java2d/joker-2048.jpg");
 			if(joker != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(joker); 
-				BufferedImage croppedBuffer = ImageResizer.getCroppedImage(buffer, 1366, 1366, CropMethod.TOP_CENTER);
-				BufferedImage scaledBuffer = ImageResizer.getScaledInstance(croppedBuffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
-				ImageResizer.writeJpeg(scaledBuffer, outputFile, 1.0F);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(joker); 
+				BufferedImage croppedBuffer = ImageUtil.getCroppedImage(buffer, 1366, 1366, CropMethod.TOP_CENTER);
+				BufferedImage scaledBuffer = ImageUtil.shrinkImage(croppedBuffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+				ImageUtil.writeJpeg(scaledBuffer, outputFile, 1.0F);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -119,10 +119,10 @@ public class ImageResizerTest {
 			long start = System.currentTimeMillis(), stop = 0L; 
 			InputStream greyscaled = getInputImageStream("com/gus/java2d/headshot.jpg");
 			if(greyscaled != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(greyscaled); 
-				BufferedImage croppedBuffer = ImageResizer.getCroppedImage(buffer, 2187, 2187, CropMethod.TOP_CENTER);
-				BufferedImage scaledBuffer = ImageResizer.getScaledInstance(croppedBuffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
-				ImageResizer.writeJpeg(scaledBuffer, outputFile, 0.9F);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(greyscaled); 
+				BufferedImage croppedBuffer = ImageUtil.getCroppedImage(buffer, 2187, 2187, CropMethod.TOP_CENTER);
+				BufferedImage scaledBuffer = ImageUtil.shrinkImage(croppedBuffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+				ImageUtil.writeJpeg(scaledBuffer, outputFile, 0.9F);
 				stop = System.currentTimeMillis();
 				System.out.println("Wrote grey_scaled.jpg in "+(stop - start)+"ms");
 			}
@@ -142,9 +142,9 @@ public class ImageResizerTest {
 			}
 			InputStream clouds = getInputImageStream("com/gus/java2d/homer.gif");
 			if(clouds != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(clouds); 
-				BufferedImage scaledBuffer = ImageResizer.getScaledInstance(buffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
-				ImageResizer.writeBufferedImage(scaledBuffer, FORMAT_GIF, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(clouds); 
+				BufferedImage scaledBuffer = ImageUtil.shrinkImage(buffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+				ImageUtil.writeBufferedImage(scaledBuffer, FORMAT_GIF, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -162,9 +162,9 @@ public class ImageResizerTest {
 			}
 			InputStream clouds = getInputImageStream("com/gus/java2d/Lisa.png");
 			if(clouds != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(clouds); 
-				BufferedImage scaledBuffer = ImageResizer.getScaledInstance(buffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
-				ImageResizer.writeBufferedImage(scaledBuffer, FORMAT_PNG, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(clouds); 
+				BufferedImage scaledBuffer = ImageUtil.shrinkImage(buffer, 60, 60, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+				ImageUtil.writeBufferedImage(scaledBuffer, FORMAT_PNG, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -182,9 +182,9 @@ public class ImageResizerTest {
 			}
 			InputStream bart = getInputImageStream("com/gus/java2d/bart.jpg");
 			if(bart != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(bart); 
-				BufferedImage croppedBuffer = ImageResizer.getCroppedImage(buffer, 300, 300, CropMethod.TOP_CENTER);
-				ImageResizer.writeBufferedImage(croppedBuffer, FORMAT_JPEG, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(bart); 
+				BufferedImage croppedBuffer = ImageUtil.getCroppedImage(buffer, 300, 300, CropMethod.TOP_CENTER);
+				ImageUtil.writeBufferedImage(croppedBuffer, FORMAT_JPEG, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -202,9 +202,9 @@ public class ImageResizerTest {
 			}
 			InputStream mrburns = getInputImageStream("com/gus/java2d/mrburns.gif");
 			if(mrburns != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(mrburns); 
-				BufferedImage croppedBuffer = ImageResizer.getCroppedImage(buffer, 200, 200, CropMethod.CENTER_CENTER);
-				ImageResizer.writeBufferedImage(croppedBuffer,  FORMAT_GIF, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(mrburns); 
+				BufferedImage croppedBuffer = ImageUtil.getCroppedImage(buffer, 200, 200, CropMethod.CENTER_CENTER);
+				ImageUtil.writeBufferedImage(croppedBuffer,  FORMAT_GIF, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -222,9 +222,9 @@ public class ImageResizerTest {
 			}
 			InputStream clouds = getInputImageStream("com/gus/java2d/Lisa.png");
 			if(clouds != null) {
-				BufferedImage buffer =  ImageResizer.getBufferedImage(clouds); 
-				BufferedImage croppedBuffer = ImageResizer.getCroppedImage(buffer, 400, 400, CropMethod.TOP_CENTER);
-				ImageResizer.writeBufferedImage(croppedBuffer,  FORMAT_PNG, outputFile);
+				BufferedImage buffer =  ImageUtil.getBufferedImage(clouds); 
+				BufferedImage croppedBuffer = ImageUtil.getCroppedImage(buffer, 400, 400, CropMethod.TOP_CENTER);
+				ImageUtil.writeBufferedImage(croppedBuffer,  FORMAT_PNG, outputFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

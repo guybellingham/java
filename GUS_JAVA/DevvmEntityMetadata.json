@@ -1,0 +1,503 @@
+{
+	"structure":"table",
+	"entityType":"portfolio",
+	"fields":[
+		{
+			"id":1,
+			"showcolumn":true,
+			"name":"title",
+			"type":"string",
+			"header":"Member",
+			"displayLength":28,
+			"renderer":"teamMemberTitle",
+			"rendererConfig":null,
+			"required":false,
+			"editor":null,
+			"editorConfig":null,
+			"sortable":false,
+			"editable":true,
+			"debug":"SimpleDisplayFieldImpl{name=title,title=Member,type=STRING}"
+		},
+		{
+			"id":2,
+			"showcolumn":false,
+			"name":"id",
+			"type":"number",
+			"header":"ID",
+			"displayLength":10,
+			"renderer":null,
+			"rendererConfig":null,
+			"required":true,
+			"editor":null,
+			"editorConfig":null,
+			"sortable":false,
+			"editable":true,
+			"debug":"SimpleDisplayFieldImpl{name=id,title=ID,type=NUMBER}"
+		},
+		{
+			"id":3,
+			"showcolumn":false,
+			"name":"memberTypeId",
+			"type":"number",
+			"header":"Type",
+			"displayLength":10,
+			"renderer":null,
+			"rendererConfig":null,
+			"required":false,
+			"editor":null,
+			"editorConfig":null,
+			"sortable":false,
+			"editable":true,
+			"debug":"SimpleDisplayFieldImpl{name=memberTypeId,title=Type,type=NUMBER}"
+		},
+		{
+			"id":4,
+			"showcolumn":false,
+			"name":"memberInstanceId",
+			"type":"number",
+			"header":"ID",
+			"displayLength":10,
+			"renderer":null,
+			"rendererConfig":null,
+			"required":false,
+			"editor":null,
+			"editorConfig":null,
+			"sortable":false,
+			"editable":true,
+			"debug":"SimpleDisplayFieldImpl{name=memberInstanceId,title=ID,type=NUMBER}"
+		},
+		{
+			"id":5,
+			"showcolumn":false,
+			"name":"profile",
+			"type":"rich",
+			"header":"Profile",
+			"displayLength":32,
+			"renderer":null,
+			"rendererConfig":null,
+			"required":true,
+			"editor":"singleselect",
+			"editorConfig":{
+				"allowedValues":[
+					{
+						"displayText":"Portfolio - Full Edit",
+						"type":"PermissionProfile",
+						"value":613297239
+					},
+					{
+						"displayText":"Portfolio - Team Member",
+						"type":"PermissionProfile",
+						"value":859372179
+					},
+					{
+						"displayText":"Read Only Permissions",
+						"type":"PermissionProfile",
+						"value":1227136866
+					}
+					
+				],
+				"allowedValueCount":3
+			},
+			"sortable":false,
+			"editable":true,
+			"debug":"{name=profile,title=Profile,type=RICH}"
+		},
+		{
+			"id":6,
+			"showcolumn":true,
+			"name":"role",
+			"type":"string",
+			"header":"Role",
+			"displayLength":0,
+			"renderer":null,
+			"rendererConfig":null,
+			"required":false,
+			"editor":null,
+			"editorConfig":null,
+			"sortable":false,
+			"editable":false,
+			"debug":"{name=role,title=Role,type=STRING}"
+		},
+		{
+			"id":7,
+			"showcolumn":true,
+			"name":"department",
+			"type":"string",
+			"header":"Current Unit",
+			"displayLength":0,
+			"renderer":null,
+			"rendererConfig":null,
+			"required":false,
+			"editor":null,
+			"editorConfig":null,
+			"sortable":false,
+			"editable":false,
+			"debug":"{name=department,title=Current Unit,type=STRING}"
+		}
+	],
+	"bufferData":true,
+	"addFeatureAdHocFieldFilteringEnabled":true,
+	"addFeatureMemberTypes":[
+		{
+			"displayText":"User",
+			"uri":"/com.innotas.service.json.entity.detail.content.EntityTeamContent.pa?listAvailable=true&listEntityType=member&entityType=portfolio&id=862952794&memberTypeId=11&memberTypeId=11"
+		},
+		{
+			"displayText":"Group",
+			"uri":"/com.innotas.service.json.entity.detail.content.EntityTeamContent.pa?listAvailable=true&listEntityType=member&entityType=portfolio&id=862952794&memberTypeId=11&memberTypeId=173"
+		},
+		{
+			"displayText":"Unit",
+			"uri":"/com.innotas.service.json.entity.detail.content.EntityTeamContent.pa?listAvailable=true&listEntityType=member&entityType=portfolio&id=862952794&memberTypeId=11&memberTypeId=229"
+		}
+		
+	],
+	"addFeatureListUri":"/com.innotas.service.json.entity.detail.content.EntityTeamContent.pa?listAvailable=true&listEntityType=member&entityType=portfolio&id=862952794&memberTypeId=11",
+	"addFeatureActionText":"Add",
+	"addFeatureDialogTitle":"Add New Group Member",
+	"addFeatureDialogSelectText":"Select a User:",
+	"addFeatureSearchEnabled":true,
+	"addFeatureFilterListUri":"/com.innotas.service.json.entity.navigation.EntityMetadata.pa?entityType=humanResource&classId=-1",
+	"deleteFeatureEnabled":true
+}
+//EntityMetadata
+{
+	"entityType":"humanResource",
+	"entityTypeId":11,
+	"tabTitle":"Human Resource List",
+	"navigationTitle":"Resources",
+	"views":[
+		{
+			"value":"45list",
+			"id":"45list",
+			"classId":"-1",
+			"entityType":"humanResource",
+			"entityTypeId":11,
+			"viewType":"list",
+			"name":"List",
+			"reference":"/com.innotas.service.json.entity.navigation.EntityList.pa?entityType=humanResource&myItemsOnly=",
+			"baseCopyUri":"/com.innotas.service.json.entity.NewEntityManifest.pa?entityType=humanResource&insertType=copy"
+		}
+	],
+	"defaultview":"45list",
+	"filterFields":[
+		{
+			"id":"1168",
+			"displayText":"Alternate Timesheet Approver",
+			"description":"ID Representation of Timesheet Approver"
+		},
+		{
+			"id":"101111",
+			"displayText":"Can availability be viewed by current user",
+			"description":"Current User can view the availability of this $Resource"
+		},
+		{
+			"id":"101109",
+			"displayText":"Can be fulfilled into staffing request by current user",
+			"description":"Current User can fullfill staffing request with this $Resource"
+		},
+		{
+			"id":"101108",
+			"displayText":"Can be staffed by current user",
+			"description":"Current User can staff this $Resource"
+		},
+		{
+			"id":"1186",
+			"displayText":"Can Edit Calendar",
+			"description":"Resource can add exceptions to their own calendar"
+		},
+		{
+			"id":"101102",
+			"displayText":"Capacity Multiplier",
+			"description":"Units"
+		},
+		{
+			"id":"1195",
+			"displayText":"Create Date",
+			"description":"Date when the object was first created"
+		},
+		{
+			"id":"1194",
+			"displayText":"Created By",
+			"description":null
+		},
+		{
+			"id":"830414573",
+			"displayText":"Department",
+			"description":null
+		},
+		{
+			"id":"1188",
+			"displayText":"Effective Base Calendar",
+			"description":"Effective base calendar"
+		},
+		{
+			"id":"1115",
+			"displayText":"Email",
+			"description":null
+		},
+		{
+			"id":"1109",
+			"displayText":"Expense Approver",
+			"description":"ID Representation of Expense Approver"
+		},
+		{
+			"id":"1103",
+			"displayText":"First Name",
+			"description":"First Name"
+		},
+		{
+			"id":"1101",
+			"displayText":"Hire Date",
+			"description":null
+		},
+		{
+			"id":"1164",
+			"displayText":"ID",
+			"description":"Resource ID"
+		},
+		{
+			"id":"1107",
+			"displayText":"Immediate Supervisor",
+			"description":"ID Representation of Supervisor"
+		},
+		{
+			"id":"1117",
+			"displayText":"Internal Rate",
+			"description":null
+		},
+		{
+			"id":"1144",
+			"displayText":"Is NOT Terminated?",
+			"description":null
+		},
+		{
+			"id":"1197",
+			"displayText":"Last Modified By",
+			"description":null
+		},
+		{
+			"id":"1198",
+			"displayText":"Last Modified Date",
+			"description":"Date when object was last modified"
+		},
+		{
+			"id":"1104",
+			"displayText":"Last Name",
+			"description":"Last Name"
+		},
+		{
+			"id":"1111",
+			"displayText":"Line of Business",
+			"description":"ID Representation of Business Unit"
+		},
+		{
+			"id":"1185",
+			"displayText":"Normalize Cost",
+			"description":null
+		},
+		{
+			"id":"1119",
+			"displayText":"Office",
+			"description":"ID Representation of Office"
+		},
+		{
+			"id":"1150",
+			"displayText":"Office Region",
+			"description":"ID Representation of Office Region"
+		},
+		{
+			"id":"1110",
+			"displayText":"Primary Organization Role",
+			"description":"ID Representation of Primary Role"
+		},
+		{
+			"id":"1151",
+			"displayText":"Role Group",
+			"description":"ID Representation of Role Group"
+		},
+		{
+			"id":"1172",
+			"displayText":"Skill Category",
+			"description":null
+		},
+		{
+			"id":"867457832",
+			"displayText":"Skill Profile",
+			"description":null
+		},
+		{
+			"id":"101107",
+			"displayText":"Supervisor Hierarchy",
+			"description":"Supervisor Hierarchy"
+		},
+		{
+			"id":"1118",
+			"displayText":"Target Billable Hours/Week",
+			"description":null
+		},
+		{
+			"id":"1113",
+			"displayText":"Team",
+			"description":"ID Representation of Department"
+		},
+		{
+			"id":"1102",
+			"displayText":"Termination Date",
+			"description":null
+		},
+		{
+			"id":"1114",
+			"displayText":"Time Zone",
+			"description":"ID Representation of Timezone"
+		},
+		{
+			"id":"1108",
+			"displayText":"Timesheet Approver",
+			"description":"ID Representation of Timesheet Approver"
+		},
+		{
+			"id":"1184",
+			"displayText":"Timesheet Period Cost",
+			"description":null
+		},
+		{
+			"id":"1112",
+			"displayText":"Type",
+			"description":"ID Representation of Type"
+		},
+		{
+			"id":"101113",
+			"displayText":"Unit",
+			"description":"$Department"
+		},
+		{
+			"id":"101114",
+			"displayText":"Unit Hierarchy",
+			"description":"$Department Hierarchy"
+		},
+		{
+			"id":"101110",
+			"displayText":"Unit Manager",
+			"description":"$Department Manager"
+		},
+		{
+			"id":"101106",
+			"displayText":"Unit Manager Hierarchy",
+			"description":"$Department Manager Hierarchy"
+		},
+		{
+			"id":"savedFilter",
+			"displayText":"Saved Filter",
+			"operators":[
+				{
+					"id":"ID",
+					"displayText":"Is",
+					"shortDisplayText":":"
+				}
+			],
+			"allowedValues":[
+				{
+					"value":"-5",
+					"displayText":"+Resources Visible to Me",
+					"description":"Show Resources whose utilization I have been given permission to view."
+				},
+				{
+					"value":"-4",
+					"displayText":"+My Resource Pool",
+					"description":null
+				},
+				{
+					"value":"MYITEMS",
+					"displayText":"My Resources",
+					"description":"Show active Resources that have me as their immediate supervisor, unit manager, or timesheet/expense approver."
+				},
+				{
+					"value":"MYARENA",
+					"displayText":"+My Active Resources",
+					"description":"Show active Resources that have me as their immediate supervisor or unit manager."
+				},
+				{
+					"value":"-2",
+					"displayText":"+Current Resources",
+					"description":"Show all active Resources (regardless of manager)."
+				},
+				{
+					"value":"-3",
+					"displayText":"+My Resources (All)",
+					"description":"Show Resources who are part of my Organization (all my direct reports and their direct reports, and so on.)"
+				},
+				{
+					"value":"1227146509",
+					"displayText":"+My Resources (All) and +Resources Visible to Me",
+					"description":"No Boom! "
+				},
+				{
+					"value":"958481235",
+					"displayText":"Admin Roles",
+					"description":""
+				},
+				{
+					"value":"1425676774562",
+					"displayText":"Admin Roles",
+					"description":""
+				},
+				{
+					"value":"1392836814967",
+					"displayText":"BI Skills",
+					"description":""
+				},
+				{
+					"value":"1429552406055",
+					"displayText":"Critical Roles",
+					"description":""
+				},
+				{
+					"value":"1227146396",
+					"displayText":"Employees Developer or Engineer",
+					"description":""
+				},
+				{
+					"value":"1392836870478",
+					"displayText":"Mobile Skills",
+					"description":""
+				},
+				{
+					"value":"1391116547672",
+					"displayText":"My Team",
+					"description":""
+				},
+				{
+					"value":"1227146391",
+					"displayText":"Primary Organization Role is Developer or Engineer",
+					"description":""
+				},
+				{
+					"value":"945388886",
+					"displayText":"Primary Resource Pool",
+					"description":""
+				},
+				{
+					"value":"1227146516",
+					"displayText":"Type is Employee and +My Resources (All) and +Resources Visible to Me",
+					"description":"3 Filters in 1"
+				}
+			]
+		}
+	],
+	"canCreateFilter":true,
+	"canSetFilterVisibility":true,
+	"defaultFilter":"-1",
+	"creatables":[
+		{
+			"id":"humanResource",
+			"title":"Human Resource",
+			"uri":"/blah/blah/blah",
+			"description":null,
+			"enabled":true
+		}
+	],
+	"permissions":{
+		"allowBulkSetBaseCalendar":true
+	}
+}
