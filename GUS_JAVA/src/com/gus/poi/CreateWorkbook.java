@@ -13,9 +13,11 @@ import java.util.List;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -28,13 +30,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class CreateWorkbook {
 	
 	public static final List<EmployeeUtilization> DATA = Arrays.asList(
-		new EmployeeUtilization("Manager, Mike","Manager",76.0),
-		new EmployeeUtilization("Developer, Dixie","Developer",95.0),
-		new EmployeeUtilization("Tester, Tim","Tester",90.0)
+		new EmployeeUtilization("Manager, Mike \n(PMP)","Manager",0.76),
+		new EmployeeUtilization("Developer, Dixie","Developer",0.95),
+		new EmployeeUtilization("Tester, Tim","Tester",0.88)
 	);
 	public static final XSSFColor COLOR_GRAY =  new XSSFColor(new byte[] {(byte)128,(byte)128,(byte)128});
 	public static final XSSFColor COLOR_GRAY_LIGHT =  new XSSFColor(new byte[] {(byte)0xCC,(byte)0xCC,(byte)0xCC});
-	public static final XSSFColor COLOR_LEMON = new XSSFColor(new byte[] {(byte)0xDC,(byte)0xDC,(byte)0x08});
+	public static final XSSFColor COLOR_LEMON = new XSSFColor(new byte[] {(byte)0xDC,(byte)0xDC,(byte)0x08}); 
+	public static final XSSFColor COLOR_LILAC = new XSSFColor(new java.awt.Color(128, 0, 128));
 	
 	public static void main(String[] args) {
 		CreateWorkbook app = new CreateWorkbook();
@@ -64,9 +67,9 @@ public class CreateWorkbook {
 	      font.setColor(HSSFColor.DARK_BLUE.index);
 	    headingStyle.setFont(font);
 	    
-	    app.createHeading(spreadsheet, headings, headingStyle);
+	    app.createHeading(workbook, spreadsheet, headings, headingStyle);
 	    
-	    int rowCount = app.createDataRows(spreadsheet, DATA);
+	    int rowCount = app.createDataRows(workbook, spreadsheet, DATA);
 	    
 	    //set print area with indexes
 	    workbook.setPrintArea(
@@ -111,62 +114,70 @@ public class CreateWorkbook {
 		}
 	}
 
-	private int createDataRows(XSSFSheet spreadsheet, List<EmployeeUtilization> data) {
-		int rowCount = 1;
+	private int createDataRows(XSSFWorkbook workbook, XSSFSheet spreadsheet, List<EmployeeUtilization> data) {
+		int rowCount = 1;  	//(0 based)
+		//Cell formats 
+        DataFormat format = workbook.createDataFormat();
+        XSSFCellStyle percentStyle = workbook.createCellStyle();
+        percentStyle.setDataFormat(format.getFormat("0.0%"));
+        percentStyle.setAlignment( XSSFCellStyle.ALIGN_RIGHT );  	//doesn't work?
+
+        //Newlines in a cell requires a cell style with wrap=true:
+        XSSFCellStyle textStyle = workbook.createCellStyle();
+        percentStyle.setAlignment( XSSFCellStyle.ALIGN_LEFT);
+        textStyle.setWrapText(true);
+        
 		for (Iterator<EmployeeUtilization> iterator = data.iterator(); iterator.hasNext();) {
 			EmployeeUtilization employeeUtilization = iterator.next();
-			//A row is a series of cells 
+			//A row is a series of cells [0], [1], [2] ..etc
 			XSSFRow row = spreadsheet.createRow(rowCount++);
-			int cellid = 0;
+			int cellid = 0;   	//(0 based)
+			//Name Last, First
 	        Cell cell0 = row.createCell(cellid++);
 	        cell0.setCellValue(employeeUtilization.getEmployeeName());
+	        cell0.setCellStyle(textStyle);
+	        //increase row height to accomodate two lines of text
+	        row.setHeightInPoints((2*spreadsheet.getDefaultRowHeightInPoints()));
+	        //adjust column width to fit the content
+	        spreadsheet.autoSizeColumn((short)0);
+	        //Role
 	        Cell cell1 = row.createCell(cellid++);
 	        cell1.setCellValue(employeeUtilization.getRole());
+	        //% Utilized
 	        Cell cell2 = row.createCell(cellid++);
+	        cell2.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
 	        cell2.setCellValue(employeeUtilization.getUtilization());
+	        cell2.setCellStyle(percentStyle);
+	        
 		}
+		//Merge cells using a new CellRangeAddress 
+		spreadsheet.addMergedRegion(new CellRangeAddress(
+				rowCount, //first row (0-based)
+				rowCount, //last row  (0-based)
+	            0, //first column (0-based)
+	            2  //last column  (0-based)
+	    ));
+		//Add a Formula cell to SUM a range of cells
 		XSSFRow totalRow = spreadsheet.createRow(rowCount);
-		XSSFCell cell2 = totalRow.createCell(2);
+		XSSFCell cell2 = totalRow.createCell(0);  	//merged cell!
 		cell2.setCellType(XSSFCell.CELL_TYPE_FORMULA);
-	    cell2.setCellFormula("SUM(C2:C4)" );
+	    cell2.setCellFormula("SUM(C2:C4)");
 	    return rowCount;
 	}
 
-	public XSSFWorkbook readWorkbook(File file) throws FileNotFoundException, IOException {
-		XSSFWorkbook workbook = null;
-		if(file.isFile() && file.exists()) {
-			try (FileInputStream fis = new FileInputStream(file);
-					BufferedInputStream bis = new BufferedInputStream(fis);){
-				//Get the workbook instance for XLSX file 
-				workbook = new XSSFWorkbook(bis);
-			}
-		} else {
-			throw new FileNotFoundException("Failed to find file "+file);
-		}
-		return workbook;
-	}
 	
-	public void writeWorkbook(File file, XSSFWorkbook workbook) throws FileNotFoundException, IOException {
-		if(file.isFile()) {
-			try (FileOutputStream fos = new FileOutputStream(file);
-					BufferedOutputStream bos = new BufferedOutputStream(fos);) {
-				workbook.write(bos);
-			}
-		} else {
-			throw new FileNotFoundException("Failed to find file "+file);
-		}
-
-	}
-	
-	public XSSFRow createHeading(XSSFSheet spreadsheet, String[] headings, XSSFCellStyle headingStyle) {
-		//Create a Row - columns are identified with alphabets and rows with numbers.
+	public XSSFRow createHeading(XSSFWorkbook workbook, XSSFSheet spreadsheet, String[] headings, XSSFCellStyle headingStyle) {
+		//Create a Row - rows are identified with (0 based) numbers.
 	    XSSFRow row = spreadsheet.createRow((short)0);
-	    int cellid = 0;
+	    int cellid = 0;   //columns are identified with alphabets 'A,B,C..etc' and a (0 based) index 
         for (String columnHeading : headings)
         {
-           Cell cell = row.createCell(cellid++);
+           Cell cell = row.createCell(cellid);
            cell.setCellValue(columnHeading);
            cell.setCellStyle(headingStyle);
+           //adjust column width to fit the heading - before incrementing cellId! 
+ 	       spreadsheet.autoSizeColumn((short)cellid);
+ 	       cellid++;
         }
 	    return row;
 	}
@@ -194,6 +205,32 @@ public class CreateWorkbook {
 		}
 	}
 	
+
+	public XSSFWorkbook readWorkbook(File file) throws FileNotFoundException, IOException {
+		XSSFWorkbook workbook = null;
+		if(file.isFile() && file.exists()) {
+			try (FileInputStream fis = new FileInputStream(file);
+					BufferedInputStream bis = new BufferedInputStream(fis);){
+				//Get the workbook instance for XLSX file 
+				workbook = new XSSFWorkbook(bis);
+			}
+		} else {
+			throw new FileNotFoundException("Failed to find file "+file);
+		}
+		return workbook;
+	}
+	
+	public void writeWorkbook(File file, XSSFWorkbook workbook) throws FileNotFoundException, IOException {
+		if(file.isFile()) {
+			try (FileOutputStream fos = new FileOutputStream(file);
+					BufferedOutputStream bos = new BufferedOutputStream(fos);) {
+				workbook.write(bos);
+			}
+		} else {
+			throw new FileNotFoundException("Failed to find file "+file);
+		}
+
+	}
 	public static class EmployeeUtilization {
 		String employeeName;
 		String role;
