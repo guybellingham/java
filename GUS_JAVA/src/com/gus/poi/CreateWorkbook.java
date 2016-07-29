@@ -67,7 +67,7 @@ public class CreateWorkbook {
 	      font.setColor(HSSFColor.DARK_BLUE.index);
 	    headingStyle.setFont(font);
 	    
-	    app.createHeading(workbook, spreadsheet, headings, headingStyle);
+	    app.createHeading(spreadsheet, headings, headingStyle);
 	    
 	    int rowCount = app.createDataRows(workbook, spreadsheet, DATA);
 	    
@@ -150,6 +150,8 @@ public class CreateWorkbook {
 	        cell2.setCellStyle(percentStyle);
 	        
 		}
+		spreadsheet.createFreezePane(0, 1);  //freeze the heading row
+//		spreadsheet.setColumnHidden(0, true);  //hide the first column
 		//Merge cells using a new CellRangeAddress 
 		spreadsheet.addMergedRegion(new CellRangeAddress(
 				rowCount, //first row (0-based)
@@ -166,7 +168,7 @@ public class CreateWorkbook {
 	}
 
 	
-	public XSSFRow createHeading(XSSFWorkbook workbook, XSSFSheet spreadsheet, String[] headings, XSSFCellStyle headingStyle) {
+	public XSSFRow createHeading(XSSFSheet spreadsheet, String[] headings, XSSFCellStyle headingStyle) {
 		//Create a Row - rows are identified with (0 based) numbers.
 	    XSSFRow row = spreadsheet.createRow((short)0);
 	    int cellid = 0;   //columns are identified with alphabets 'A,B,C..etc' and a (0 based) index 
