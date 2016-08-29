@@ -192,6 +192,8 @@ public class ThreadRunner {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		System.out.println();
+		logger.debug("Finished printer1 "+printer1);
 	}
 	
 	public static void startProducerAndConsumer() {

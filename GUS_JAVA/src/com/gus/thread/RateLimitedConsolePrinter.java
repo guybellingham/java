@@ -4,27 +4,31 @@ public class RateLimitedConsolePrinter implements Runnable {
 	
 	boolean finished = false; 
 	char character = 'x';
+	long sleepDuration = 200;  		//milliseconds
 	TokenBucket bucket = TokenBucket.getInstance();   //thread safe
 	
 	public RateLimitedConsolePrinter(char character) {
 		setCharacter(character);
+		//For testing use 5 per second
+		bucket.rate = 5;
+		bucket.timespan = 1000;
 	}
 	
 	@Override
 	public void run() {
-		Thread current = Thread.currentThread();
+		//Thread current = Thread.currentThread();
 		
         while (!finished) {
-        	if(bucket.getToken()) {
+        	if(bucket.get()) { 
         		System.out.print(character);
+        	} else {
+        		//System.out.print("\n Thread "+current.getName()+" waiting");
+				try {
+					Thread.sleep(sleepDuration);
+				} catch (InterruptedException e) {
+					//ignore
+				}
         	}
-        	//sleep for 0 - 200 msec
-        	try {
-        		long millis = Math.round(Math.random() * 200);
-				Thread.sleep(millis);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		}
 
 	}
@@ -47,9 +51,9 @@ public class RateLimitedConsolePrinter implements Runnable {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder("rateLimitedPrinter:{");
-		sb.append("char:\"").append(getCharacter()).append("\",");
-		sb.append(bucket);
-		sb.append("finished:").append(isFinished()).append("}");
+		sb.append("char:\"").append(getCharacter()).append("\"");
+		sb.append(",").append(bucket);
+		sb.append(",").append("finished:").append(isFinished()).append("}");
 		return sb.toString();
 	}
 }

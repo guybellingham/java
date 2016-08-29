@@ -1,62 +1,88 @@
 package com.gus.thread;
 
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * Use TokenBucket as a v.simple way to limit the rate at which 
+ * virtual 'tokens' are issued {@link #getToken()} to one or more threads 
+ * that are consuming some resource at an indeterminate rate. 
+ * <pre>
+ * TokenBucket bucket = TokenBucket.getInstance();   //thread safe
+ * if(bucket.get()) {
+ *    //consume some resource at a determined rate
+ * } else {
+ *    //wait or do something else
+ * }
+ * </pre>
+ * Note: The {@link #getToken()} method will not block the calling Thread. 
+ * @author Guy
+ */
 public class TokenBucket {
 
-	private static final TokenBucket instance = new TokenBucket();
+	/**
+	 * The maximum rate at which tokens can be issued in any one timespan.
+	 */
+	long rate = 50; 
+	/**
+	 * The timespan defaults to one minute in which to issue a maximum {@value #rate} 'tokens'.
+	 */
+	long timespan  = 1000 * 60;	
+	/**
+	 * The atomic bucket of 'tokens'. 
+	 */
+	AtomicLong tokens = new AtomicLong();
+	/**
+	 * The number of tokens issued - mostly for testing/verification
+	 */
+	AtomicLong issued = new AtomicLong(0);
 	
+	AtomicLong last_check = new AtomicLong(System.currentTimeMillis() - timespan);
+	
+	/**
+	 * The Singleton instance.
+	 */
+	private static final TokenBucket instance = new TokenBucket();
 	private TokenBucket() {
 	}
 	public static TokenBucket getInstance() {
 		return instance;
 	}
-	/**
-	 * The maximum rate of tokens issued.
-	 */
-	double rate = 5.0;
-	/**
-	 * The timespan (milliseconds) to issue tokens.
-	 */
-	double per  = 1000.0;
-	/**
-	 * The bucket of 'tokens'. 
-	 */
-	double allowance = rate; 	//the bucket
 	
-	long last_check = System.currentTimeMillis();
+	
 	/**
-	 * The number of tokens issued so far in this timespan.
+	 * Get a 'token' from the 'bucket' of tokens available in every timespan. 
+	 * Tokens are 'issued' at a maximum {@link #rate} over a certain timespan {@link #timespan}.
+	 * @return <code>true</code> if the maximum rate of issuing 'tokens'  
+	 * has not been exceeded, <code>false</code> if we've run out of 'tokens' for the time being.
 	 */
-	long tokensIssued = 0;
-	/**
-	 * @return <code>true</code> if the maximum rate of issuing 'tokens' has not been exceeded  
-	 * <code>false</code> otherwise.
-	 */
-	public synchronized boolean getToken() {
-	  long current = System.currentTimeMillis();
-	  long time_passed = current - last_check;
-	  last_check = current;
-	  allowance += time_passed * (rate / per);
-	  if (allowance > rate){
-		  allowance = rate; 	//reset
-		  tokensIssued = 0;
-	  }
-	  if (allowance < 1.0) {
-		  return false;
-	  } else {
-		  allowance -= 1.0;
-		  tokensIssued++;
-		  return true;
-	  }
+	public boolean get() {
+		if(rate > 0) {
+			long current_time = System.currentTimeMillis();
+			long time_passed = current_time - last_check.get();
+			if(time_passed >= timespan) {
+				tokens.set(rate);  			//refill bucket
+				last_check.set(current_time);
+				//TODO Poll ConfigUtils for any new rate value?
+			}
+			if(tokens.get() > 0) {
+				tokens.getAndDecrement();  	//issue 1 token
+				issued.getAndIncrement();
+				return true;			
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
 	}
 	
-	public synchronized long getTokensIssued() {
-		return tokensIssued;
-	}
 	public String toString() {
 		StringBuilder sb = new StringBuilder("bucket:{");
-		sb.append("issued:").append(getTokensIssued()).append(",");
 		sb.append("rate:").append(rate).append(",");
-		sb.append("per:").append(per).append("}");
+		sb.append("per:").append(timespan).append(",");
+		sb.append("issued:").append(issued.get()).append(",");
+		sb.append("remaining:").append(tokens.get()).append("}");
 		return sb.toString();
 	}
+
 }
