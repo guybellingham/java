@@ -43,6 +43,8 @@ public class ThreadRunner {
 //		startTickTockPrinters();
 		
 //		startProducerAndConsumer();
+		
+		startRateLimitedPrinters();
 	}
 	
 	/**
@@ -162,6 +164,36 @@ public class ThreadRunner {
 		}
 	}
 
+	public static void startRateLimitedPrinters() {
+		RateLimitedConsolePrinter printer1 = new RateLimitedConsolePrinter('.');
+		RateLimitedConsolePrinter printer2 = new RateLimitedConsolePrinter('-');
+		RateLimitedConsolePrinter printer3 = new RateLimitedConsolePrinter('|');
+		
+		Thread thread1 = new Thread(printer1,"DotThread");
+		Thread thread2 = new Thread(printer2,"DashThread");
+		Thread thread3 = new Thread(printer3,"SlashThread");
+		logger.debug("Starting 3 RateLimitedPrinters:");
+		thread1.start();
+		thread2.start();
+		thread3.start();
+		
+		try
+	      {
+	          Thread.sleep (10000);
+	      }
+	      catch (InterruptedException e)
+	      {
+	      }
+		printer1.setFinished(true);
+		printer2.setFinished(true);
+		printer3.setFinished(true);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void startProducerAndConsumer() {
 //		MonitorObject monitor = new MonitorObject();
 		BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(5);
