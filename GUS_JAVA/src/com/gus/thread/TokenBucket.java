@@ -22,21 +22,21 @@ public class TokenBucket {
 	/**
 	 * The maximum rate at which tokens can be issued in any one timespan.
 	 */
-	long rate = 50; 
+	long rate = 5; 
 	/**
 	 * The timespan defaults to one minute in which to issue a maximum {@value #rate} 'tokens'.
 	 */
-	long timespan  = 1000 * 60;	
+	long timespan  = 1000;	
 	/**
 	 * The atomic bucket of 'tokens'. 
 	 */
-	AtomicLong tokens = new AtomicLong();
+	long tokens = rate;
 	/**
 	 * The number of tokens issued - mostly for testing/verification
 	 */
-	AtomicLong issued = new AtomicLong(0);
+	long issued = 0;
 	
-	AtomicLong last_check = new AtomicLong(System.currentTimeMillis() - timespan);
+	long last_check = 0;
 	
 	/**
 	 * The Singleton instance.
@@ -58,19 +58,23 @@ public class TokenBucket {
 	public boolean get() {
 		if(rate > 0) {
 			long current_time = System.currentTimeMillis();
-			long time_passed = current_time - last_check.get();
-			if(time_passed >= timespan) {
-				tokens.set(rate);  			//refill bucket
-				last_check.set(current_time);
-				//TODO Poll ConfigUtils for any new rate value?
+			synchronized (this) {
+				long time_passed = current_time - last_check;
+				if(time_passed >= timespan) {
+					tokens = rate;  			//refill bucket
+					last_check = current_time;
+					//TODO Poll ConfigUtils for any new rate value?
+					System.out.println("R");
+				}
 			}
-			if(tokens.get() > 0) {
-				tokens.getAndDecrement();  	//issue 1 token
-				issued.getAndIncrement();
+			if(tokens > 0) {
+				tokens--;  	//issue 1 token
+				issued++;
 				return true;			
 			} else {
 				return false;
 			}
+			
 		} else {
 			return true;
 		}
@@ -80,8 +84,8 @@ public class TokenBucket {
 		StringBuilder sb = new StringBuilder("bucket:{");
 		sb.append("rate:").append(rate).append(",");
 		sb.append("per:").append(timespan).append(",");
-		sb.append("issued:").append(issued.get()).append(",");
-		sb.append("remaining:").append(tokens.get()).append("}");
+		sb.append("issued:").append(issued).append(",");
+		sb.append("remaining:").append(tokens).append("}");
 		return sb.toString();
 	}
 

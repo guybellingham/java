@@ -1,16 +1,19 @@
 package com.gus.thread;
 
+import java.util.Random;
+
 public class RateLimitedConsolePrinter implements Runnable {
 	
 	boolean finished = false; 
 	char character = 'x';
-	long sleepDuration = 200;  		//milliseconds
-	TokenBucket bucket = TokenBucket.getInstance();   //thread safe
+	long sleepDuration = 100;  	//milliseconds
+//	long sleepDuration = new Random().nextInt(100);  	//milliseconds
+	TokenBucket bucket = TokenBucket.getInstance();   	//thread safe
 	
 	public RateLimitedConsolePrinter(char character) {
 		setCharacter(character);
-		//For testing use 5 per second
-		bucket.rate = 5;
+		//For testing use 15 per second
+		bucket.rate = 15;
 		bucket.timespan = 1000;
 	}
 	
@@ -19,9 +22,11 @@ public class RateLimitedConsolePrinter implements Runnable {
 		//Thread current = Thread.currentThread();
 		
         while (!finished) {
+        	//long token = bucket.getToken();
         	if(bucket.get()) { 
         		System.out.print(character);
         	} else {
+        		System.out.print('z');
         		//System.out.print("\n Thread "+current.getName()+" waiting");
 				try {
 					Thread.sleep(sleepDuration);
