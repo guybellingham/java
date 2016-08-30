@@ -1,7 +1,5 @@
 package com.gus.thread;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
  * Use TokenBucket as a v.simple way to limit the rate at which 
  * virtual 'tokens' are issued {@link #getToken()} to one or more threads 
@@ -64,7 +62,7 @@ public class TokenBucket {
 					tokens = rate;  			//refill bucket
 					last_check = current_time;
 					//TODO Poll ConfigUtils for any new rate value?
-					System.out.println("R");
+					//System.out.println("R");
 				}
 			}
 			if(tokens > 0) {

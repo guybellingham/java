@@ -176,14 +176,15 @@ public class ThreadRunner {
 		thread1.start();
 		thread2.start();
 		thread3.start();
+		//30 seconds
+		for(int ix = 0; ix < 30; ix++) {
+			try {
+		          Thread.sleep (1000);
+		    } catch (InterruptedException e) {
+		    }
+			System.out.println("");
+		}
 		
-		try
-	      {
-	          Thread.sleep (10000);
-	      }
-	      catch (InterruptedException e)
-	      {
-	      }
 		printer1.setFinished(true);
 		printer2.setFinished(true);
 		printer3.setFinished(true);
@@ -193,7 +194,9 @@ public class ThreadRunner {
 			e.printStackTrace();
 		}
 		System.out.println();
-		logger.debug("Finished printer1 "+printer1);
+		logger.debug("printer1 "+printer1);
+		logger.debug("printer2 "+printer2);
+		logger.debug("printer3 "+printer3);
 	}
 	
 	public static void startProducerAndConsumer() {
