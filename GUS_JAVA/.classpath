@@ -40,5 +40,10 @@
 	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="lib/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/guava-19.0.jar"/>
+	<classpathentry kind="lib" path="lib/antlr3.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-1.11.134.jar"/>
+	<classpathentry kind="lib" path="lib/jsch.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
