@@ -2,7 +2,6 @@ package com.gus.tree;
 
 import java.util.Iterator;
 
-import com.sun.istack.internal.Nullable;
 
 /**
  * A class that specializes in 'walking' up and down a tree of business objects 
@@ -33,7 +32,6 @@ public class TreeWalker<T> {
 	 * @param id
 	 * @return the TreeNode with the given <code>id</code> or <code>null</code>.
 	 */
-	@Nullable
 	public TreeNode<T> getTreeNodeById(long id) {
 		TreeNode<T> node = tree.getRoot();
 		return getTreeNodeById(node, id);

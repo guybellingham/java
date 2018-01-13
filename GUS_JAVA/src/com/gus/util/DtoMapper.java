@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
+
 /**
  * A generic type safe DTO/Javabean properties Mapper which you can 
  * use very simply as follows: <br/>

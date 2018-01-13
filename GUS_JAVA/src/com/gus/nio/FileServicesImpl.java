@@ -24,13 +24,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.openjdk.tools.sjavac.Log;
+
 
 public final class FileServicesImpl implements FileServices {
 
-	private static final Logger logger = LogManager.getLogger(FileServicesImpl.class);
+	private static final Logger logger = Logger.getLogger("com.gus.nio");
 	private int bufferSize = 4096;   //4K
 	
 	/* (non-Javadoc)
@@ -111,7 +113,7 @@ public final class FileServicesImpl implements FileServices {
 	    try (SeekableByteChannel sbc = Files.newByteChannel(path, options)) {
 	    	return sbc.write(byteBuffer);
 	    } catch (IOException e) {
-	    	logger.error("FAILED  to appendToFile("+path.toAbsolutePath()+")",e);
+	    	logger.log(Level.SEVERE, "FAILED  to appendToFile("+path.toAbsolutePath()+")", e);
 			throw e;
 	    }
 	}
@@ -152,7 +154,7 @@ public final class FileServicesImpl implements FileServices {
 		    	output.add(line);
 		    }
 		} catch (IOException e) {
-			logger.error("FAILED  to readAsciiTextFile "+path.toAbsolutePath(),e);
+			logger.log(Level.SEVERE, "FAILED  to readAsciiTextFile "+path.toAbsolutePath(),e);
 			throw e;
 		} 
 		return output;
@@ -184,10 +186,10 @@ public final class FileServicesImpl implements FileServices {
 	        bytesOut = new ByteArrayOutputStream(fileSize);
 	        long startTime = 0L, elapsedTime = 0L;
 	        
-	        if(logger.isDebugEnabled()) {
+	        
 	        	startTime = System.nanoTime();
-				logger.debug("readLargeBinaryFile("+path.getFileName()+") about to map "+fileChannel.size()+" bytes into byteBuffer!");
-			}
+	        	logger.log(Level.FINEST, "readLargeBinaryFile("+path.getFileName()+") about to map "+fileChannel.size()+" bytes into byteBuffer!");
+			
 	        
 	        int bytesCount = 0;
 	        while ((bytesCount = fileChannel.read(byteBuffer)) > 0) { // Read data from file into ByteBuffer
@@ -201,12 +203,12 @@ public final class FileServicesImpl implements FileServices {
 	            // Write data from ByteBuffer to file
 	        	byteBuffer.clear();     // For the next read
 	        }
-	        if(logger.isDebugEnabled()) {
+	        
 	        	elapsedTime = System.nanoTime() - startTime;
-	        	logger.debug("readLargeBinaryFile: elapsed=" + (elapsedTime / 1000000.0) + " msec");
-	        }
+	        	logger.log(Level.FINEST, "readLargeBinaryFile: elapsed=" + (elapsedTime / 1000000.0) + " msec");
+	        
 		} catch (FileNotFoundException e) {
-			logger.error("FAILED  to find filename "+path.toAbsolutePath(),e);
+			logger.log(Level.SEVERE, "FAILED  to find filename "+path.toAbsolutePath(),e);
 			throw e;
 		} finally {
 			if(null!=byteBuffer) {
@@ -230,19 +232,19 @@ public final class FileServicesImpl implements FileServices {
 		try {
 			bigFile = new RandomAccessFile(filename, "r");
 			fileChannel = bigFile.getChannel();
-			if(logger.isDebugEnabled()) {
-				logger.debug("readLargeTextFile("+filename+") about to map "+fileChannel.size()+" bytes into byteBuffer!");
-			}
+			
+			logger.log(Level.FINEST, "readLargeTextFile("+filename+") about to map "+fileChannel.size()+" bytes into byteBuffer!");
+			
 			byteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size());
 			byteBuffer.load(); 
 			CharBuffer charBuffer = Charset.forName(encoding).decode(byteBuffer);
 			charBuffer.rewind();
 			sb.append(charBuffer);
 		} catch (FileNotFoundException e) {
-			logger.error("FAILED  to find filename "+filename,e);
+			logger.log(Level.SEVERE, "FAILED  to find filename "+filename,e);
 			throw e;
 		} catch (IOException e) {
-			logger.error("FAILED  to read filename "+filename,e);
+			logger.log(Level.SEVERE, "FAILED  to read filename "+filename,e);
 			throw e;
 		} finally {
 			if(null!=byteBuffer) {
@@ -276,11 +278,11 @@ public final class FileServicesImpl implements FileServices {
 		    // Create the empty file with default permissions, etc.
 		    Files.createFile(path);
 		} catch (FileAlreadyExistsException e) {
-		    logger.error("FAILED  to create filename "+filename,e);
+			logger.log(Level.SEVERE, "FAILED  to create filename "+filename,e);
 			throw e;
 		} catch (IOException e) {
 		    // Some other sort of failure, such as permissions.
-			logger.error("FAILED  to create filename "+filename,e);
+			logger.log(Level.SEVERE, "FAILED  to create filename "+filename,e);
 			throw e;
 		}
 		return path;
@@ -308,11 +310,11 @@ public final class FileServicesImpl implements FileServices {
 		    // Create the empty file with default permissions, etc.
 			pathToFile = Files.createTempFile(filename, extension);
 		} catch (FileAlreadyExistsException e) {
-		    logger.error("FAILED  to create filename "+filename,e);
+			logger.log(Level.SEVERE, "FAILED  to create filename "+filename,e);
 			throw e;
 		} catch (IOException e) {
 		    // Some other sort of failure, such as permissions.
-			logger.error("FAILED  to create filename "+filename,e);
+			logger.log(Level.SEVERE, "FAILED  to create filename "+filename,e);
 			throw e;
 		}
 		return pathToFile;
@@ -336,7 +338,7 @@ public final class FileServicesImpl implements FileServices {
 		    rc = Files.deleteIfExists(path);
 		} catch (IOException e) {
 		    // Some other sort of failure, such as permissions.
-			logger.error("FAILED  to delete filename "+path.toAbsolutePath()+"?",e);
+			logger.log(Level.SEVERE, "FAILED  to delete filename "+path.toAbsolutePath()+"?",e);
 			throw e;
 		}
 		return rc;

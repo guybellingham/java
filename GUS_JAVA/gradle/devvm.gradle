@@ -1,0 +1,236 @@
+def sshUser = project.getProperty('devvm6.ssh.username')
+def sshPassword = project.getProperty('devvm6.ssh.password')
+def sshHost = project.getProperty('devvm.host')
+def warmupUser = project.getProperty('devvm.warmup.username')
+def warmupPassword = project.getProperty('devvm.warmup.password')
+
+ssh.settings { knownHosts = allowAnyHosts }
+
+remotes {
+    devvm {
+        host = sshHost
+        user = sshUser
+        password = sshPassword
+    }
+}
+
+task devvmStartApache {
+    group 'Devvm'
+    description 'Start apache server on devvm'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                execute 'service apache2 start'
+            }
+        }
+    }
+}
+
+task devvmStartTomcat {
+    group 'Devvm'
+    description 'Start apache server on devvm'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                execute 'service tomcat8 start'
+            }
+        }
+    }
+}
+
+task devvmStart(dependsOn: ['devvmStartApache', 'devvmStartTomcat']) {
+    group 'Devvm'
+    description 'Start apache and tomcat servers on devvm'
+}
+
+
+task devvmStopApache {
+    group 'Devvm'
+    description 'Stop apache server on devvm'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                execute 'service apache2 stop'
+            }
+        }
+    }
+}
+
+task devvmStopTomcat {
+    group 'Devvm'
+    description 'Stop tomcat server on devvm'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                execute 'service tomcat8 stop'
+            }
+        }
+    }
+}
+
+task devvmStop(dependsOn: ['devvmStopApache', 'devvmStopTomcat']) {
+    group 'Devvm'
+    description 'Stop apache and tomcat servers on devvm'
+}
+
+
+task devvmInit(dependsOn: ['devvmBase']) {
+    group 'Devvm'
+    description 'Initialize environment and token replace from YaML'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                put from: "${buildDir}/devvm-base.deb", into: '/tmp'
+                execute 'dpkg -i /tmp/devvm-base.deb'
+                execute 'apt-get -fy install'
+            }
+        }
+    }
+
+}
+
+task devvmInstallCommon(dependsOn: ['innotasCommon']) {
+    group 'Devvm'
+    description 'Deploy just the common package to devvm'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                put from: "${buildDir}/innotas-common.deb", into: '/tmp'
+                execute 'dpkg -i /tmp/innotas-common.deb'
+                execute 'apt-get -fy install'
+            }
+        }
+    }
+}
+
+task deleteInnotasDbDeb(type: Delete) {
+    delete "${buildDir}/innotas-db.deb"
+}
+
+task devvmInstallDb(dependsOn: [ 'devvmInstallCommon', 'innotasDb' ]) {
+    group 'Devvm'
+    description 'Deploy just the db to devvm'
+
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                put from: "${buildDir}/innotas-db.deb", into: '/tmp'
+                execute 'dpkg -i /tmp/innotas-db.deb'
+            }
+        }
+    }
+}
+devvmInstallDb.dependsOn deleteInnotasDbDeb
+
+task devvmInstallApp(dependsOn: [ 'devvmInstallCommon', 'innotasApp']) {
+    group 'Devvm'
+    description 'Deploy just the app package to devvm'
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                put from: "${buildDir}/innotas-app.deb", into: '/tmp'
+                execute 'dpkg -i /tmp/innotas-app.deb'
+            }
+        }
+        // If we push client code after doing an install, we only need to push what changed since this full install.
+        ant.touch(file: file('build/devvmInstallClientCode.touch'))
+    }
+}
+devvmInstallApp.mustRunAfter devvmInstallDb
+
+task devvmInstallFull(dependsOn: [ 'devvmInstallDb', 'devvmInstallApp', 'blessJsCode']) {
+    group 'Devvm'
+    description 'Deploy full build to devvm'
+
+}
+
+task devvmInstallClientCode {
+    group 'Devvm'
+    description 'Deploy just un-packaged client code'
+    File baseDir = file("./webroot/ext/workspace/packages/local/innotasCore")
+    inputs.dir baseDir
+    outputs.file file('build/devvmInstallClientCode.touch')
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                put from: baseDir, into: '/var/lib/tomcat8/webapps/ROOT/ext/workspace/packages/local', filter: {it.lastModified() > outputs.files.singleFile.lastModified()}
+            }
+        }
+        println 'Messages with \'Failed SFTP MKDIR\' are expected.'
+        ant.touch(file: outputs.files.singleFile)
+    }
+}
+
+task devvmInstallClientCodeCss {
+    group 'Devvm'
+    description 'Deploy just un-packaged client code'
+    File baseDir = file("./webroot/ext/workspace/build/development")
+    inputs.dir baseDir
+    outputs.file file('build/devvmInstallClientCodeCss.touch')
+    doLast {
+        ssh.run {
+            settings { pty = true }
+            session(remotes.devvm) {
+                put from: baseDir, into: '/var/lib/tomcat8/webapps/ROOT/ext/workspace/build', filter: {it.lastModified() > outputs.files.singleFile.lastModified()}
+            }
+        }
+        println 'Messages with \'Failed SFTP MKDIR\' are expected.'
+        ant.touch(file: outputs.files.singleFile)
+    }
+}
+
+// this version is taking 30+ seconds to run.
+//task devvmInstallClientCode {
+//    group 'Devvm'
+//    description 'Deploy just un-packaged client code'
+//    inputs.dir file("./webroot/ext/workspace/")
+//    outputs.file file('build/devvmInstallClientCode.touch')
+//    doLast {
+//        ssh.run {
+//            settings { pty = true }
+//            session(remotes.devvm) {
+//                put from: file("./webroot/ext/workspace/packages/local"), into: '/var/lib/tomcat8/webapps/ROOT/ext/workspace/packages', filter: {it.lastModified() > outputs.files.singleFile.lastModified()}
+//                put from: file("./webroot/ext/workspace/build"), into: '/var/lib/tomcat8/webapps/ROOT/ext/workspace', filter: {it.lastModified() > outputs.files.singleFile.lastModified()}
+//            }
+//        }
+//        println 'Messages with \'Failed SFTP MKDIR\' are expected.'
+//        ant.touch(file: outputs.files.singleFile)
+//    }
+//}
+
+
+task devvmWaitForServerStart {
+    group 'Devvm'
+    description 'Block until the devvm servers (apache and tomcat) are up and responding'
+    String devvmStatusUrl = 'https://' + remotes.devvm.host + '/index.jsp'
+    doLast {
+        ant.waitfor(maxWait:40, maxWaitUnit: 'second', checkEvery:1, checkEveryUnit: 'second', timeoutProperty:'-waitForServerStart.timedout') {
+            ant.http(url: devvmStatusUrl)
+        }
+        ant.fail(if: '-waitForServerStart.timedout', message: 'Timed out waiting for web server to start.')
+        ant.echo(message: 'Web server started.', level: 'info')
+    }
+}
+
+task devvmWarmupServer(dependsOn: devvmWaitForServerStart) {
+    group 'Devvm'
+    description 'Login to the devvm server as a default user to cache-load that customer'
+    doLast {
+        if (warmupUser && !warmupUser.allWhitespace && warmupPassword && !warmupPassword.allWhitespace) {
+            String devvmWarmupUrl = 'https://' + remotes.devvm.host + '/home.pa'
+            ant.echo(message: '"Warming up server at ' + devvmWarmupUrl + ' with user ' + warmupUser + '.', level: 'info')
+            file('build').mkdirs()
+            ant.get(src: devvmWarmupUrl, username: warmupUser, password: warmupPassword, dest: 'build/warmup.tmp')
+            ant.echo(message: 'Server at ' + devvmWarmupUrl + ' warmed up with user ' + warmupUser + '.', level: 'info')
+        }
+    }
+}

@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import com.google.code.geocoder.AdvancedGeoCoder;
 import com.google.code.geocoder.Geocoder;
@@ -28,7 +28,7 @@ import com.gus.pattern.serviceprovider.AddressGeocoding;
 
 public class GoogleAddressGeocoder implements AddressGeocoding {
 
-	private static final Logger logger = LogManager.getLogger(GoogleAddressGeocoder.class);
+	private static final Logger logger = Logger.getLogger("com.gus.pattern");
 	
 	public GoogleAddressGeocoder() {		
 	}
@@ -44,17 +44,16 @@ public class GoogleAddressGeocoder implements AddressGeocoding {
 		HttpClient httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
 		httpClient.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 30 * 1000); //30s
 		Geocoder geocoder = new AdvancedGeoCoder(httpClient);
-		if(logger.isDebugEnabled()) {
-			logger.debug("geocode("+address+") starting ...");
-		}
+		
+		logger.log(Level.FINEST, "geocode("+address+") starting ...");
+		
 		GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(address.toString()).setLanguage("en").getGeocoderRequest();
 		try {
 			GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
 			GeocoderStatus status = geocoderResponse.getStatus();
 			if(status == GeocoderStatus.OK) {
-				if(logger.isDebugEnabled()) {
-					logger.debug("geocode("+address+") status is OK!");
-				}
+				logger.log(Level.FINEST, "geocode("+address+") status is OK!");
+				
 				List<GeocoderResult> results = geocoderResponse.getResults();
 				for (Iterator<GeocoderResult> iterator = results.iterator(); iterator.hasNext();) {
 					GeocoderResult geocoderResult = (GeocoderResult) iterator.next();
@@ -62,17 +61,16 @@ public class GoogleAddressGeocoder implements AddressGeocoding {
 					address.setPartialGeocoderMatch(partialMatch);
 					GeocoderGeometry geometry = geocoderResult.getGeometry();
 					GeocoderLocationType type = geometry.getLocationType();
-					if(logger.isDebugEnabled()) {
-						logger.debug("geocode("+address+") result partialMatch="+partialMatch+" geometry="+geometry+ " type="+type);
-					}
+					
+					logger.log(Level.FINEST, "geocode("+address+") result partialMatch="+partialMatch+" geometry="+geometry+ " type="+type);
+					
 					LatLng latLng = geometry.getLocation();
 					BigDecimal latitude = latLng.getLat();
 					BigDecimal longitude = latLng.getLng();
 					address.setLatitude(latitude);
 					address.setLongitude(longitude);
-					if(logger.isDebugEnabled()) {
-						logger.debug("geocode("+address+") setting latitude="+latitude.toPlainString()+" longitude="+longitude.toPlainString());
-					}
+					logger.log(Level.FINEST, "geocode("+address+") setting latitude="+latitude.toPlainString()+" longitude="+longitude.toPlainString());
+					
 					if(!partialMatch) {
 						List<GeocoderAddressComponent> components = geocoderResult.getAddressComponents();
 						for (Iterator<GeocoderAddressComponent> iterator2 = components.iterator(); iterator2.hasNext();) {
@@ -87,7 +85,7 @@ public class GoogleAddressGeocoder implements AddressGeocoding {
 				throw new GeoCodingException("FAILED to geocode address="+address+" status="+status);
 			}
 		} catch (IOException e) {
-			logger.error("FAILED to geocode("+address+")!",e);
+			logger.log(Level.SEVERE, "FAILED to geocode("+address+")!",e);
 			throw new GeoCodingException("FAILED to connect to google "+Geocoder.getGeocoderHost()+" geocoding service!",e);
 		}
 		

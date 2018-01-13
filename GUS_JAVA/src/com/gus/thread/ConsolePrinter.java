@@ -1,10 +1,11 @@
 package com.gus.thread;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsolePrinter implements Runnable {
 	
-	private static final Logger logger = LogManager.getLogger(ConsolePrinter.class);
+	private static final Logger logger = Logger.getLogger("com.gus.thread");
 	
 	public ConsolePrinter(char character) {
 		setCharacter(character);
@@ -17,9 +18,8 @@ public class ConsolePrinter implements Runnable {
 	public void run() {
 		Thread current = Thread.currentThread();
 		
-        if(logger.isDebugEnabled()) {
-			logger.debug(current.getName()+" running ConsolePrinter("+getCharacter()+") starting...");
-		}
+		logger.log(Level.FINEST, current.getName()+" running ConsolePrinter("+getCharacter()+") starting...");
+		
 
         while (!finished) {
         	synchronized(System.out) {
@@ -33,9 +33,8 @@ public class ConsolePrinter implements Runnable {
 		}
         System.out.print('\n');
 		
-		if(logger.isDebugEnabled()) {
-        	logger.debug("ConsolePrinter("+getCharacter()+") finished.");
-        }
+        logger.log(Level.FINEST, "ConsolePrinter("+getCharacter()+") finished.");
+        
 	}
 
 	public char getCharacter() {

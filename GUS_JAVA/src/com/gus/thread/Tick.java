@@ -1,6 +1,8 @@
 package com.gus.thread;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Tick will wait for Tock but not the other way around!
  * @author Guy
@@ -8,7 +10,7 @@ import org.apache.log4j.Logger;
  */
 public class Tick implements Runnable {
 	
-	private static final Logger logger = LogManager.getLogger(Tick.class);
+	private static final Logger logger = Logger.getLogger("com.gus.thread");
 	
 	public Tick(Semaphore semaphore) {
 		setLockObject(semaphore);
@@ -21,9 +23,8 @@ public class Tick implements Runnable {
 	public void run() {
 		Thread current = Thread.currentThread();
 		
-        if(logger.isDebugEnabled()) {
-			logger.debug(current.getName()+" running Tick starting...");
-		}
+			logger.log(Level.FINEST, current.getName()+" running Tick starting...");
+		
 
         while (!finished) {
         	//print

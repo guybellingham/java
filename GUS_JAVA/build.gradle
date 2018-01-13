@@ -1,0 +1,410 @@
+plugins {
+    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+    id 'org.hidetake.ssh' version '2.9.0'
+    id "org.inferred.processors" version "1.2.15"
+}
+
+repositories { 
+    maven { url "https://repo1.maven.org/maven2/" }
+}
+
+def buildNumber = '0.1.00'
+def buildId = new Date().format('yyyy-MM-dd_hh-mm-ss')
+def warFile = "GUS_${buildNumber}.war"
+def parallelForks = "$System.env.PARALLEL_FORKS" == 'null' ? Runtime.getRuntime().availableProcessors() : Integer.valueOf("$System.env.PARALLEL_FORKS").intValue();
+def testSingle = System.getProperty("test.single") == null ? '**/*Test*.class' : '**/' + System.getProperty("test.single") + '*.class'
+def forkEveryTest = 1
+
+configurations {
+    perJvmTestCompile.extendsFrom testCompile
+    perJvmTestRuntime.extendsFrom testRuntime
+    globalDataProcessorJarCompile.extendsFrom compile
+    globalDataProcessorJarDep
+    processor
+    ssh
+    datapimp
+    cucumber
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'io.spring.dependency-management'
+apply from: 'gradle/notification.gradle'
+apply from: 'gradle/dependencies.gradle'
+
+dependencyManagement {
+    imports {
+        mavenBom "com.amazonaws:aws-java-sdk-bom:${awsSdkVersion}"
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+            include 'com/gus/**/*.properties'
+            include 'com/gus/**/*.txt'
+            include 'com/gus/**/*.sql'
+        }
+    }
+    test {
+        java {
+            srcDir 'test'
+        }
+    }
+
+    perJvmTest {
+        java {
+            srcDir 'test'
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+        }
+    }
+ 
+    globalDataProcessorJar {
+        java {
+            srcDir 'src'
+            include 'com/gus/annotation/*.java'
+            include 'com/gus/annotation/**/*.java'
+            include 'com/gus/enumeration/*.java'
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+        resources {
+            srcDir 'src'
+            include 'META-INF/services/javax.annotation.processing.Processor'
+        }
+    }
+}
+
+eclipse {
+    classpath {
+        plusConfigurations += [
+            configurations.perJvmTestCompile,
+            configurations.cucumber
+        ]
+        sourceSets -= [
+            sourceSets.globalDataProcessorJar,
+        ]
+    }
+}
+
+processors {
+    project.eclipse.processors.outputDir = project.file('generated_src')
+}
+
+task cleanGenerated(type: Delete) {
+    group 'Build'
+    description 'Clean any directories and folders outside the build directory'
+    delete 'generated_src'
+}
+
+clean.dependsOn cleanGenerated
+
+task copyResourceFiles(type: Copy) {
+    includeEmptyDirs false
+    from 'src'
+    into "${project.buildDir}/resources"
+    include '**/*.txt'
+    include '**/*.sql'
+    include '**/*.json'
+    include '**/*.properties'
+    include '**/*.ttf'
+    include '**/*.svg'
+    include '**/*.csv'
+    include '**/innotas.io.crt'
+    include '**/innotas.io.key'
+    include '**/dev-rnd-projectplace-com-ies.crt'
+    include '**/.keystore'
+    exclude 'com/innotas/font/roboto/src/*'
+}
+
+task copyResourceTestFiles(type: Copy) {
+    includeEmptyDirs false
+    from 'test'
+    into "${project.buildDir}/resources/test"
+    include '**/*.txt'
+    include '**/*.sql'
+}
+
+task perJvmTest(type: Test) {
+    jvmArgs "-Dapple.awt.UIElement=true"
+    description 'Run per JVM unit tests separate from other unit tests (slow)'
+    configurations.perJvmTestRuntime
+    testClassesDirs = sourceSets.perJvmTest.output.classesDirs
+    classpath =  sourceSets.perJvmTest.runtimeClasspath
+    include testSingle
+    forkEvery 1
+    maxParallelForks parallelForks
+}
+
+task copyCompileLibs(type: Copy) {
+    into file("${project.buildDir}/lib/compile")
+    from configurations.compile
+}
+
+task copyProcessorLibs(type: Copy) {
+    into file("${project.buildDir}/lib/processor")
+    from configurations.processor
+}
+
+task copyRuntimeLibs(type: Copy) {
+    into file("${project.buildDir}/lib/runtime")
+    from configurations.runtime
+}
+
+task copyTestCompileLibs(type: Copy) {
+    into file("${project.buildDir}/lib/test-compile")
+    from configurations.testCompile
+}
+
+task copyTestCucumberLibs(type: Copy) {
+    into file("${project.buildDir}/lib/test-compile")
+    from configurations.cucumber
+}
+
+task copyTestPerJvmLibs(type: Copy) {
+    into file("${project.buildDir}/lib/test-compile")
+    from configurations.perJvmTestCompile
+}
+
+task deleteAggregateLibs(type: Delete) {
+    delete fileTree("${project.buildDir}/lib")
+}
+
+tasks.withType(JavaCompile) {
+    // We want to use UTF-8 encoding on all javac invocations.  This is not the default on Windows machines.
+    options.encoding = "UTF-8"
+}
+tasks.withType(Javadoc) {
+    // We want to use UTF-8 encoding on all javac invocations.  This is not the default on Windows machines.
+    options.encoding = "UTF-8"
+}
+
+
+task copyLibs(dependsOn: [
+        'copyCompileLibs',
+        'copyProcessorLibs',
+        'copyRuntimeLibs',
+        'copyTestCompileLibs',
+        'copyTestCucumberLibs',
+        'copyTestPerJvmLibs'
+]) {
+}
+
+// Set up compile to depend on delete and rest to depend on compile so that delete is done first
+copyCompileLibs.dependsOn deleteAggregateLibs
+copyProcessorLibs.dependsOn copyCompileLibs
+copyRuntimeLibs.dependsOn copyCompileLibs
+copyTestCompileLibs.dependsOn copyCompileLibs
+copyTestCucumberLibs.dependsOn copyCompileLibs
+copyTestPerJvmLibs.dependsOn copyCompileLibs
+
+compileJava {
+    options.fork = true  // Fork our compilation into a child process
+    options.forkOptions.setMemoryMaximumSize("2g") // Set maximum memory to 2g
+}
+
+compileJava.dependsOn copyResourceFiles
+compileTestJava.dependsOn copyResourceTestFiles
+test.dependsOn perJvmTest
+
+def generatedSrc = "${project.buildDir}/generated_src"
+
+task prepareGeneratedSrcDir {
+    doLast {
+        project.file(generatedSrc).mkdirs()
+    }
+}
+
+task compileGeneratedSrc (type: JavaCompile, dependsOn: prepareGeneratedSrcDir) {
+    group 'build'
+    description 'Generate source from annotation processors and place in build directory'
+    project.file(generatedSrc).mkdirs()
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+    destinationDir = sourceSets.main.output.classesDirs[0]
+    options.sourcepath = sourceSets.main.java.sourceDirectories
+    options.annotationProcessorPath = configurations.processor
+    options.compilerArgs = ['-proc:only', '-s', generatedSrc]
+}
+
+// TODO(Barry): find all dependencies
+task compileDatapimp (type: JavaCompile, dependsOn: compileGeneratedSrc) {
+    group 'build'
+    description 'Compile datapimp classes (WIP - Does not work yet)'
+    source = fileTree(dir: 'src').plus(fileTree(dir: generatedSrc))
+    includes = ['com/innotas/tools/datapimp/**/*.java',
+        'com/innotas/tools/datapimp/**/*.properties',
+        'com/innotas/tools/datapimp/**/*.txt',
+        'com/innotas/tools/datapimp/**/*.sql',
+        generatedSrc + "/**/*.java",
+        'com/innotas/aws/s3/**/*.java',
+        'com/innotas/business/preference/UserSelectedPreferenceName.java',
+        'com/innotas/business/util/ArraySubList.java',
+        'com/innotas/business/util/SubList.java',
+        'com/innotas/dagger/delegate/STD.java',
+        'com/innotas/date/TTInstant.java',
+        'com/innotas/date/TTLocalDate.java',
+        'com/innotas/date/TTLocalDateTime.java',
+        'com/innotas/filter/FilterUtils.java',
+        'com/innotas/filter/IFilter.java',
+        'com/innotas/report/history/HistoryType.java',
+        'com/innotas/util/InnotasContext.java',
+        'com/innotas/util/ImageUtil.java',
+        'com/innotas/util/RequestCache.java',
+        'services/objects/ServerInfoResponse.java',
+        'tt/access/PermissionCacheService.java',
+        'tt/access/PermissionSet.java',
+        'tt/busobj/Account.java',
+        'tt/busobj/DateConversionSupport.java',
+        'tt/busobj/Engagement.java',
+        'tt/busobj/HumanResource.java',
+        'tt/busobj/IntakeItem.java',
+        'tt/busobj/InternalTsPeriod.java',
+        'tt/busobj/Issue.java',
+        'tt/busobj/JspPageDef.java',
+        'tt/busobj/Portfolio.java',
+        'tt/busobj/Practice.java',
+        'tt/busobj/Project.java',
+        'tt/busobj/PropertyNameCache.java',
+        'tt/busobj/Task.java',
+        'tt/busobj/TimesheetState.java',
+        'tt/busobj/TTBusObj.java',
+        'tt/busobj/TTBusObjId.java',
+        'tt/busobj/TTClob.java',
+        'tt/busobj/TTCustomer.java',
+        'tt/busobj/TTFilter.java',
+        'tt/busobj/TTObjectMethod.java',
+        'tt/busobj/User.java',
+        'tt/busobj/util/TTBusObjHelper.java',
+        'tt/constants/CustomerClass.java',
+        'tt/constants/Entity.java',
+        'tt/constants/FinanceSettings.java',
+        'tt/constants/Misc.java',
+        'tt/constants/Status.java',
+        'tt/jsp/popup/ValueRenderer.java',
+        'tt/jsp/report/Renderer.java',
+        'tt/jsp/obj/Filter.java',
+        'tt/htmlobj/Select.java',
+        'tt/jdbc/DbPool.java',
+        'tt/jsp/pageband/resource/ResourceCapacityHelper.java',
+        'tt/jsp/ttag/NoteThread.java',
+        'tt/mt/AbstractCapacityDemandDataProxy.java',
+        'tt/mt/AttachmentContentProxy.java',
+        'tt/mt/EntityMembershipProxy.java',
+        'tt/mt/FinanceSettingProxy.java',
+        'tt/mt/HumanResourceProxy.java',
+        'tt/mt/LobProxy.java',
+        'tt/mt/MTProxyAdapter.java',
+        'tt/mt/ProxyFactory.java',
+        'tt/mt/OfficeProxy.java',
+        'tt/mt/TTFilterProxy.java',
+        'tt/mt/TTCustomerProxy.java',
+        'tt/mt/TTCustomerProxyBase.java',
+        'tt/mt/UDFProxy.java',
+        'tt/mt/WorkCalendarCache.java',
+        'tt/mt/collections/IridizeAppMapBuilder.java',
+        'tt/mt/cache/ResultSetCache.java',
+        'tt/mt/logic/PALoginLogic.java',
+        'tt/util/ConfigUtils.java',
+        'tt/util/DataDictionary.java',
+        'tt/util/GraveBell.java',
+        'tt/util/ListHelper.java',
+        'tt/util/PermissionType.java',
+        'tt/util/STD.java',
+        'tt/util/StringHelper.java',
+        'tt/util/TTCustomerLocale.java',
+        'tt/util/TTDateUtils.java',
+        'tt/util/TTException.java',
+        'tt/util/TTLocaleInfo.java',
+        'tt/util/TTPermission.java',
+        'tt/util/TTThread.java',
+        'tt/util/sql/SQLLoader.java',
+        'tt/util/sql/SQLRunner.java'] as Set
+    classpath = configurations.compile
+    destinationDir = file("${project.buildDir}/classes/java/datapimp")
+    options.compilerArgs = ['-proc:none']
+}
+
+task createDatapimpJar(type: Jar) {
+    description 'Create DataPimp jar'
+    group 'build'
+    from sourceSets.main.output
+    from {
+        configurations.datapimp.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    destinationDir = file("${project.buildDir}/tools")
+    archiveName 'datapimp.jar'
+    manifest {
+        attributes(
+                'Main-Class': 'com.innotas.tools.datapimp.Main'
+                )
+    }
+}
+
+task createGlobalDataProcessorJar(type: Jar) {
+    description 'Build Global Data Processor jar'
+    group 'AnnotationProcessor'
+    from sourceSets.globalDataProcessorJar.output
+    from {
+        configurations.globalDataProcessorJarDep.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    destinationDir = file("${project.buildDir}/tools")
+    archiveName 'global-data-processor.jar'
+}
+
+javadoc { failOnError false }
+
+task wrapper(type: Wrapper) { gradleVersion = '4.0' }
+
+task listJars(dependsOn: [
+    'listCompileJars',
+    'listTestJars'
+])
+
+task listCompileJars {
+    doLast {
+        println '=== compile jars ==='
+        configurations.compile.each { File file ->
+            println file.name
+        }
+    }
+}
+
+task listTestJars {
+    doLast {
+        println '=== test jars ==='
+        configurations.perJvmTestCompile.each { File file ->
+            println file.name
+        }
+    }
+}
+
+
+test {
+    jvmArgs "-Dapple.awt.UIElement=true"
+    include '**/*Test*.class'
+    exclude '**/*Testing*.class'
+    exclude '**/*TestAsyncJob.class'
+    forkEvery forkEveryTest
+    maxParallelForks parallelForks
+}
+
+
+war {
+    from "${project.buildDir}/web"
+    rootSpec.exclude 'com/gus/tools'
+    webInf { from 'web/WEB-INF/web.xml' }
+    destinationDir = file("${project.buildDir}")
+    zip64 = true
+    archiveName "${warFile}"
+}

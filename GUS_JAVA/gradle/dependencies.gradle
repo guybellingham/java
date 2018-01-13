@@ -1,0 +1,228 @@
+dependencies {
+    compile group: 'javax.annotation', name: 'javax.annotation-api', version: "${annotationApiVersion}"
+    compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    compile "org.apache.commons:commons-math3:${commonsMathVersion}"
+    compile "commons-dbutils:commons-dbutils:${commonsDbutilsVersion}"
+    compile "commons-logging:commons-logging:${commonsLoggingVersion}"
+    compile "commons-codec:commons-codec:${commonsCodecVersion}"
+    compile "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
+    compile "commons-io:commons-io:${commonsIoVersion}"
+    compile "org.apache.commons:commons-text:${commonsTextVersion}"
+    compile "org.apache.ant:ant:${apacheAntVersion}"
+    compile("com.google.guava:guava:${guavaVersion}") {
+        exclude module: 'j2objc-annotations'
+    }
+    compile("org.apache.commons:commons-digester3:${commonsDigester}") {
+        exclude module: 'commons-logging'
+        exclude module: 'commons-beanutils'
+        exclude module: 'xml-apis'
+        exclude module: 'commons-collections'
+        exclude module: 'asm'
+    }
+    compile("commons-httpclient:commons-httpclient:${commonsHttpclientVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+    }
+    compile("org.apache.httpcomponents:httpclient:${httpclientVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+    }
+    compile "joda-time:joda-time:${jodaTimeVersion}"
+    compile "com.google.code.gson:gson:${gsonVersion}"
+    compile("xalan:xalan:${xalanVersion}") {
+        exclude module: 'xml-apis'
+    }
+    compile "javax.activation:activation:${activationVersion}"
+    compile('javax.mail:mail:1.4') { exclude module: 'activation' }
+    
+    compile "org.json:json:${orgJsonVersion}"
+    compile("org.apache.httpcomponents:httpcore:${httpcoreVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+    }
+    compile("org.apache.poi:poi:${apachePoiVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+        exclude module: 'stax-api'
+    }
+    compile("org.apache.poi:poi-ooxml:${apachePoiVersion}") {
+        exclude module: 'xml-apis'
+        exclude module: 'stax-api'
+    }
+    compile("org.apache.poi:poi-ooxml-schemas:${apachePoiVersion}") {
+        exclude module: 'xml-apis'
+        exclude module: 'stax-api'
+    }
+    compile "com.ibm.icu:icu4j:${icuVersion}"
+    compile 'com.opencsv:opencsv:${opencsvVersion}'
+    compile("org.apache.commons:commons-email:${commonsEmailVersion}") { exclude module: 'mail' }
+    compile("org.javassist:javassist:${javassistVersion}") { exclude module: 'junit' }
+    compile "net.jawr:jawr:${jawrVersion}"
+    compile "org.jdom:jdom:${jdomVersion}"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonDatabindVersion}"
+    compile("org.glassfish.jersey.containers:jersey-container-servlet:${glassfishJerseyVersion}") {
+        exclude module: 'guava'
+        exclude module: 'javassist'
+        exclude module: 'j2objc-annotations'
+    }
+    compile group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${glassfishJerseyVersion}"
+    compile "com.opencsv:opencsv:${opencsvVersion}"
+    compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    compile("com.google.dagger:dagger:${daggerVersion}") {
+        exclude module: 'guava'
+        exclude module: 'jsr250-api'
+        exclude module: 'javax.inject'
+    }
+    compile "com.amazonaws:aws-java-sdk-route53:${awsSdkVersion}"
+    compile "com.amazonaws:aws-java-sdk-dynamodb:${awsSdkVersion}"
+    compile "com.amazonaws:aws-java-sdk-s3:${awsSdkVersion}"
+    compile "com.amazonaws:aws-java-sdk-athena:${awsSdkVersion}"
+    compile "commons-fileupload:commons-fileupload:${commonsFileUpload}"
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.0.Final'
+    compile "com.google.auto.value:auto-value:${autoValueVersion}"
+    compile group: 'com.google.code.geocoder-java', name: 'geocoder-java', version: '0.16'
+    compile group: 'net.sf.dozer', name: 'dozer', version: '5.5.1'
+
+    
+
+    //
+    // PROCESSOR
+    //
+    processor "javax.annotation:javax.annotation-api:${javaxAnnotationVersion}"
+    processor("com.google.guava:guava:${guavaVersion}") {
+        exclude module: 'j2objc-annotations'
+    }
+    processor "com.google.auto.value:auto-value:${autoValueVersion}"
+    processor("com.google.dagger:dagger-producers:${daggerVersion}") {
+        exclude module: 'guava'
+        exclude module: 'jsr250-api'
+    }
+    processor("com.google.dagger:dagger-compiler:${daggerVersion}") {
+        exclude module: 'guava'
+        exclude module: 'jsr250-api'
+    }
+
+
+    //
+    // PROVIDED
+    //
+    providedCompile "org.apache.tomcat:tomcat-jsp-api:${apacheTomcatVersion}"
+    providedCompile "org.apache.tomcat:tomcat-servlet-api:${apacheTomcatVersion}"
+    providedCompile "org.apache.tomcat:tomcat-jasper:${apacheTomcatVersion}"
+
+    //
+    // RUNTIME
+    //
+    runtime "xerces:xercesImpl:${xercesImplVersion}"
+    runtime 'annogen:annogen:0.1.0'
+    runtime("org.glassfish.web:javax.servlet.jsp.jstl:${glassfishJstlVersion}") {
+        exclude module: 'servlet-api'
+        exclude module: 'jsp-api'
+    }
+    runtime("jaxen:jaxen:${jaxenVersion}") {
+        exclude module: 'xalan'
+        exclude module: 'xercesImpl'
+        exclude module: 'xml-apis'
+        exclude module: 'xalan'
+        exclude module: 'icu4j'
+        exclude module: 'commons-logging'
+    }
+    runtime "log4j:log4j:${log4jVersion}"
+    runtime "bcel:bcel:${bcelVersion}"
+    runtime "commons-cli:commons-cli:${commonsCliVersion}"
+    runtime 'org.gnu:gnu-crypto:2.0.1'
+    runtime 'org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1'
+    runtime 'org.apache.geronimo.specs:geronimo-jaxws_2.2_spec:1.0'
+    runtime 'org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1'
+    runtime 'org.apache.geronimo.specs:geronimo-saaj_1.3_spec:1.0.1'
+    runtime 'org.apache.geronimo.specs:geronimo-ws-metadata_2.0_spec:1.1.2'
+    runtime 'org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1'
+    runtime "org.apache.tomcat:tomcat-juli:${apacheTomcatVersion}"
+    runtime "log4j:log4j:${log4jVersion}"
+    runtime "stax:stax-api:${staxApiVersion}"
+    runtime 'regexp:regexp:1.3'
+    runtime "org.slf4j:slf4j-api:${slf4jVersion}"
+    runtime "org.slf4j:slf4j-log4j12:${slf4jVersion}"
+    runtime 'org.apache.taglibs:taglibs-standard:1.2.5'
+    runtime "org.tuckey:urlrewritefilter:${urlRewriteFilterVersion}"
+    runtime "javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:${servletJspJstlVersion}"
+
+
+    //
+    // TEST
+    //
+    testCompile("junit:junit:${junitVersion}") { exclude module: 'hamcrest-core' }
+    testCompile 'org.assertj:assertj-core:3.3.0'
+    testCompile "org.hamcrest:hamcrest-all:${hamcrestVersion}"
+    testCompile 'com.thedeanda:lorem:1.2'
+    testCompile "org.mockito:mockito-all:${mockitoVersion}"
+    testCompile "info.cukes:cucumber-java:${cucumberVersion}"
+    testCompile "info.cukes:cucumber-junit:${cucumberVersion}"
+    testCompile("commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}") {
+        exclude module: 'commons-logging'
+        exclude module: 'commons-collections'
+    }
+    testCompile "log4j:log4j:${log4jVersion}"
+    testCompile "org.ow2.asm:asm:${asmVersion}"
+    testCompile "org.ow2.asm:asm-commons:${asmVersion}"
+    testCompile "org.ow2.asm:asm-tree:${asmVersion}"
+    testCompile("org.eclipse.jetty:jetty-server:${jettyVersion}") {
+        exclude module: 'javax.servlet'
+        exclude module: 'asm'
+        exclude module: 'asm-commons'
+        exclude module: 'asm-tree'
+    }
+    testCompile("commons-httpclient:commons-httpclient:${commonsHttpclientVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+    }
+    testCompile("org.apache.httpcomponents:httpclient:${httpclientVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+        exclude module: 'httpcore'
+    }
+    testCompile "org.assertj:assertj-core:${assertjCoreVersion}"
+
+
+    perJvmTestCompile "org.jmockit:jmockit:${jmockitVersion}"
+
+    datapimp "com.amazonaws:aws-java-sdk-s3:${awsSdkVersion}"
+    datapimp "com.amazonaws:aws-java-sdk-route53:${awsSdkVersion}"
+    datapimp 'com.innotas:servlet:1.0.0'
+    datapimp "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    datapimp "commons-logging:commons-logging:${commonsLoggingVersion}"
+    datapimp "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
+    datapimp "commons-codec:commons-codec:${commonsCodecVersion}"
+    datapimp("org.apache.httpcomponents:httpclient:${httpclientVersion}") {
+        exclude module: 'commons-codec'
+        exclude module: 'commons-logging'
+    }
+    datapimp "commons-io:commons-io:${commonsIoVersion}"
+    datapimp "joda-time:joda-time:${jodaTimeVersion}"
+    datapimp "xerces:xercesImpl:${xercesImplVersion}"
+    datapimp "com.google.guava:guava:${guavaVersion}"
+    datapimp "org.apache.commons:commons-text:${commonsTextVersion}"
+    datapimp("org.javassist:javassist:${javassistVersion}") { exclude module: 'junit' }
+    datapimp group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+    datapimp "javax.inject:javax.inject:1"
+    datapimp("com.google.dagger:dagger:${daggerVersion}") {
+        exclude module: 'guava'
+    }
+    datapimp 'org.reflections:reflections:0.9.11'
+    datapimp "org.json:json:${orgJsonVersion}"
+    datapimp("net.sf.mpxj:mpxj:${mpxjVersion}") {
+        exclude module: 'poi'
+        exclude module: 'junit'
+        exclude module: 'sqlite-jdbc'
+    }
+
+    globalDataProcessorJarDep "com.google.guava:guava:${guavaVersion}"
+    globalDataProcessorJarDep "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    globalDataProcessorJarDep "commons-logging:commons-logging:${commonsLoggingVersion}"
+    globalDataProcessorJarDep "commons-codec:commons-codec:${commonsCodecVersion}"
+    globalDataProcessorJarDep "commons-io:commons-io:${commonsIoVersion}"
+
+
+    cucumber "info.cukes:cucumber-picocontainer:${cucumberVersion}"
+
+}

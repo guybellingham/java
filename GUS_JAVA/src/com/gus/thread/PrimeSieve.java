@@ -1,12 +1,11 @@
 package com.gus.thread;
 import java.util.Arrays;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PrimeSieve implements Runnable {
 	
-	private static final Logger logger = LogManager.getLogger(PrimeSieve.class);
+	private static final Logger logger = Logger.getLogger("com.gus.thread");
 	
 	public PrimeSieve(int size) {
 		setSize(size);
@@ -18,21 +17,21 @@ public class PrimeSieve implements Runnable {
 	@Override
 	public void run() {
 		long startTime = 0L, elapsedTime = 0L;
-        if(logger.isDebugEnabled()) {
+        
         	startTime = System.nanoTime();
-			logger.debug("PrimeSieve("+getSize()+") starting...");
-		}
+        	logger.log(Level.FINEST, "PrimeSieve("+getSize()+") starting...");
+		
 
         setPrimes(new boolean[getSize()]);
         
 		fillSieve();
 		
-		logger.info(printPrimes());
+		logger.log(Level.FINEST, printPrimes());
 		
-		if(logger.isDebugEnabled()) {
+		
         	elapsedTime = System.nanoTime() - startTime;
-        	logger.debug("PrimeSieve finished elapsed=" + (elapsedTime / 1000000.0) + " msec");
-        }
+        	logger.log(Level.FINEST, "PrimeSieve finished elapsed=" + (elapsedTime / 1000000.0) + " msec");
+        
 	}
 	
 	//set up the primesieve
@@ -40,9 +39,8 @@ public class PrimeSieve implements Runnable {
 	    Arrays.fill(primes,true);        // assume all integers are prime!
 	    primes[0]=primes[1]=false;       // we know 0 and 1 are not prime.
 	    
-	    if(logger.isDebugEnabled()) {
-			logger.debug("PrimeSieve("+getSize()+") sieving...");
-		}
+	    logger.log(Level.FINEST, "PrimeSieve("+getSize()+") sieving...");
+		
 	    for (int i=2;i<primes.length;i++) {
 	        //starting from 2 if the number is prime, 
 	        //then go through all its multiples and make their values false.
@@ -54,16 +52,15 @@ public class PrimeSieve implements Runnable {
 	            Thread.yield();   //be a good thread
 	        }
 	    }
-	    if(logger.isDebugEnabled()) {
-			logger.debug("PrimeSieve("+getSize()+") sieving done.");
-		}
+	    logger.log(Level.FINEST, "PrimeSieve("+getSize()+") sieving done.");
+		
 	}
 	
 	public String printPrimes() {
 		String threadName = Thread.currentThread().getName();  //get the Thread that is running me!
 		StringBuilder sb = new StringBuilder();   //local variables are Thread safe (stored on the stack) 
 		
-		logger.debug(threadName+" printing Primes...");
+		logger.log(Level.FINEST, threadName+" printing Primes...");
 		
 		for (int i=2;i<primes.length;i++) {
 			 if(primes[i]) {
@@ -76,7 +73,7 @@ public class PrimeSieve implements Runnable {
 				 Thread.yield();
 			 }
 		}
-		logger.debug(threadName+" finished printing Primes.");
+		logger.log(Level.FINEST, threadName+" finished printing Primes.");
 		
 		//object properties are NOT Thread safe they are stored on the (shared) Heap
 		return sb.toString();

@@ -6,13 +6,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WebUser extends AbstractUser {
 
-	private static final Logger logger = LogManager.getLogger(WebUser.class);
+	private static final Logger logger = Logger.getLogger("com.gus.pattern");
 	
 	public static final DateFormat ISO_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	public static final DateFormat US_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
@@ -73,10 +72,8 @@ public class WebUser extends AbstractUser {
    	     	hexString.append(hex);
     	}
     	this.password = hexString.toString();
-    	if(logger.isDebugEnabled()) {
-    		//TODO NOT Secure!
-			logger.debug("Setting new password "+newPass+" hashed value="+this.password);
-		}
+    	logger.log(Level.FINEST, "Setting new password "+newPass+" hashed value="+this.password);
+		
 	}
 
 	@Override
@@ -145,7 +142,7 @@ public class WebUser extends AbstractUser {
 			try {
 				this.dateOfBirth = ISO_FORMAT.parse(dateOfBirthString);
 			} catch (ParseException e1) {
-				logger.error("INVALID dateOfBirthString format \""+dateOfBirthString+"\"?",e);
+				logger.log(Level.SEVERE, "INVALID dateOfBirthString format \""+dateOfBirthString+"\"?",e);
 			}
 		}
 	}

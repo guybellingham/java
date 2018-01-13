@@ -8,11 +8,10 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.gus.exception.LatLongTimezoneException;
@@ -21,7 +20,7 @@ import com.gus.pattern.serviceprovider.LatLongTimezone;
 
 public class GoogleLatLongTimezoner implements LatLongTimezone {
 
-	private static final Logger logger = LogManager.getLogger(GoogleLatLongTimezoner.class);
+	private static final Logger logger = Logger.getLogger("com.gus.pattern");
 	
 	public static final String END_POINT = "https://maps.googleapis.com/maps/api/timezone/json?location={0}&timestamp={1}";
 	public static final String USER_AGENT = "Mozilla/5.0";
@@ -42,19 +41,19 @@ public class GoogleLatLongTimezoner implements LatLongTimezone {
 		Long timeInSeconds = timeInMillis/1000;
 		String tuple = address.getLatLongTuple();
 		String urlString = MessageFormat.format(END_POINT, tuple, timeInSeconds.toString());
-		logger.debug("getTimezone() for Address=" + address + " tuple=" + tuple);
+		logger.log(Level.FINEST, "getTimezone() for Address=" + address + " tuple=" + tuple);
 		
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException e) {
-			logger.error("FAILED  to create URL "+urlString,e);
+			logger.log(Level.SEVERE, "FAILED  to create URL "+urlString,e);
 			throw new LatLongTimezoneException("FAILED to create URL");
 		} 
 		
 		try {
 			con = (HttpsURLConnection) url.openConnection();
 		} catch (IOException e) {
-			logger.error("FAILED to open connection to URL="+url,e);
+			logger.log(Level.SEVERE, "FAILED to open connection to URL="+url,e);
 			throw new LatLongTimezoneException("FAILED to open connection");
 		}
 		
@@ -62,7 +61,7 @@ public class GoogleLatLongTimezoner implements LatLongTimezone {
 		try {
 			con.setRequestMethod("GET");
 		} catch (ProtocolException e) {
-			logger.error("FAILED to set 'GET' method on HttpUrlConnection="+con,e);
+			logger.log(Level.SEVERE, "FAILED to set 'GET' method on HttpUrlConnection="+con,e);
 			throw new LatLongTimezoneException("FAILED to set GET method");
 		}
 		con.setRequestProperty("User-Agent", USER_AGENT);
@@ -81,7 +80,7 @@ public class GoogleLatLongTimezoner implements LatLongTimezone {
 			jsonResponse = readResponse(con);
 			
 		} catch (IOException e) {
-			logger.error("FAILED to get response from HttpUrlConnection="+con,e);
+			logger.log(Level.SEVERE, "FAILED to get response from HttpUrlConnection="+con,e);
 			throw new LatLongTimezoneException("FAILED to get a response");
 		}
 
@@ -90,9 +89,9 @@ public class GoogleLatLongTimezoner implements LatLongTimezone {
 			String timezoneId = response.getTimeZoneId();
 			TimeZone timeZone = TimeZone.getTimeZone(timezoneId);
 			address.setTimeZone(timeZone);
-			logger.debug("\nGot TimeZone = " + timezoneId);
+			logger.log(Level.FINEST, "\nGot TimeZone = " + timezoneId);
 		} else {
-			logger.error("FAILED to get OK response status="+response.getStatus()+" error="+response.getError_message());
+			logger.log(Level.SEVERE, "FAILED to get OK response status="+response.getStatus()+" error="+response.getError_message());
 			throw new LatLongTimezoneException("FAILED to get \"OK\" response");
 		}
 	}
@@ -103,7 +102,7 @@ public class GoogleLatLongTimezoner implements LatLongTimezone {
 		try {
 			in = new BufferedReader( new InputStreamReader(con.getInputStream()) );
 		} catch (IOException e) {
-			logger.error("FAILED to get InputStream from HttpUrlConnection="+con,e);
+			logger.log(Level.SEVERE, "FAILED to get InputStream from HttpUrlConnection="+con,e);
 			throw new LatLongTimezoneException("FAILED to get InputStream from response");
 		}
 		
@@ -116,7 +115,7 @@ public class GoogleLatLongTimezoner implements LatLongTimezone {
 			}
 			response = sb.toString();
 		} catch (IOException e) {
-			logger.error("FAILED to read response line from BufferedReader",e);
+			logger.log(Level.SEVERE, "FAILED to read response line from BufferedReader",e);
 			throw new LatLongTimezoneException("FAILED to read response");
 		} finally {
 			try {

@@ -8,9 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.gus.pattern.serviceprovider.AbstractUser;
 import com.gus.pattern.serviceprovider.UserIdExistsException;
@@ -18,7 +17,7 @@ import com.gus.pattern.serviceprovider.UserRegistration;
 
 public class FileBasedUserRegistration implements UserRegistration {
 
-	private static final Logger logger = LogManager.getLogger(AbstractUser.class);
+	private static final Logger logger = Logger.getLogger("com.gus.pattern");
 	
 	private static final String SUFFIX = ".xml";
 	
@@ -59,7 +58,7 @@ public class FileBasedUserRegistration implements UserRegistration {
 			Path path = Paths.get("C:\\temp\\", userId+SUFFIX);
 			Files.deleteIfExists(path);
 		} catch (IOException e) {
-			logger.error("FAILED to delete profile "+userId+SUFFIX,e); 
+			logger.log(Level.SEVERE, "FAILED to delete profile "+userId+SUFFIX,e); 
 		}
 	}
 	
@@ -79,7 +78,7 @@ public class FileBasedUserRegistration implements UserRegistration {
 			});
 			encoder.writeObject(abstractUser);
 		} catch (Exception e) {
-			logger.error("FAILED to write profile "+abstractUser.getUserId()+SUFFIX, e); 
+			logger.log(Level.SEVERE, "FAILED to write profile "+abstractUser.getUserId()+SUFFIX, e); 
 		} finally {
 			if(null!=encoder) {
 				encoder.close();

@@ -4,9 +4,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 /**
  * 
  * The Java 'volatile' keyword guarantees visibility of changes to variables across threads. 
@@ -19,17 +19,16 @@ import org.apache.log4j.Logger;
  */
 public class ThreadRunner {
 	
-	private static final Logger logger = LogManager.getLogger(ThreadRunner.class);
+	private static final Logger logger = Logger.getLogger("com.gus.thread");
 	private static ThreadRunner app;
 	
 	public static void main(String[] args) {
-		org.apache.log4j.BasicConfigurator.configure();
 		
 		app = new ThreadRunner();
 		UncaughtExceptionHandler eh = new UncaughtExceptionHandler() {		
 			@Override
 			public void uncaughtException(Thread t, Throwable e) {
-				logger.error("Thread "+t+" Failed!",e);
+				logger.log(Level.SEVERE, "Thread "+t+" Failed!",e);
 			}
 		};
 		Thread.setDefaultUncaughtExceptionHandler(eh);
@@ -56,9 +55,9 @@ public class ThreadRunner {
 		Thread thread1 = new Thread(run1,"Count1Thread");
 		//thread1.setPriority (Thread.NORM_PRIORITY + 1); 
 		Thread thread2 = new Thread(run1,"Count2Thread");
-		logger.debug("Starting thread Count1");
+		logger.log(Level.FINEST, "Starting thread Count1");
 		thread1.start();
-		logger.debug("Starting thread Count2");
+		logger.log(Level.FINEST, "Starting thread Count2");
 		thread2.start();
 		try
 	      {
@@ -84,9 +83,9 @@ public class ThreadRunner {
 		Thread thread1 = new Thread(printer1,"Printer1Thread");
 		//thread1.setPriority (Thread.NORM_PRIORITY + 1); 
 		Thread thread2 = new Thread(printer2,"Printer2Thread");
-		logger.debug("Starting thread Printer1");
+		logger.log(Level.FINEST, "Starting thread Printer1");
 		thread1.start();
-		logger.debug("Starting thread Printer2");
+		logger.log(Level.FINEST, "Starting thread Printer2");
 		thread2.start();
 		try
 	      {
@@ -113,9 +112,9 @@ public class ThreadRunner {
 		LockingConsolePrinter printer2 = new LockingConsolePrinter('>',lock);   
 		Thread thread1 = new Thread(printer1,"Locking1Thread");
 		Thread thread2 = new Thread(printer2,"Locking2Thread");
-		logger.debug("Starting thread Locking1Thread");
+		logger.log(Level.FINEST, "Starting thread Locking1Thread");
 		thread1.start();
-		logger.debug("Starting thread Locking2Thread");
+		logger.log(Level.FINEST, "Starting thread Locking2Thread");
 		thread2.start();
 		try
 	      {
@@ -139,14 +138,14 @@ public class ThreadRunner {
 		Tock tock = new Tock(lock);
 		Thread thread1 = new Thread(tick,"TickThread");
 		Thread thread2 = new Thread(tock,"TockThread");
-		logger.debug("Starting thread TickThread");
+		logger.log(Level.FINEST, "Starting thread TickThread");
 		thread1.start();
 		try {
 			Thread.sleep(300);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		logger.debug("Starting thread TockThread");
+		logger.log(Level.FINEST, "Starting thread TockThread");
 		thread2.start();
 		try
 	      {
@@ -172,7 +171,7 @@ public class ThreadRunner {
 		Thread thread1 = new Thread(printer1,"DotThread");
 		Thread thread2 = new Thread(printer2,"DashThread");
 		Thread thread3 = new Thread(printer3,"SlashThread");
-		logger.debug("Starting 3 RateLimitedPrinters:");
+		logger.log(Level.FINEST, "Starting 3 RateLimitedPrinters:");
 		thread1.start();
 		thread2.start();
 		thread3.start();
@@ -194,9 +193,9 @@ public class ThreadRunner {
 			e.printStackTrace();
 		}
 		System.out.println();
-		logger.debug("printer1 "+printer1);
-		logger.debug("printer2 "+printer2);
-		logger.debug("printer3 "+printer3);
+		logger.log(Level.FINEST, "printer1 "+printer1);
+		logger.log(Level.FINEST, "printer2 "+printer2);
+		logger.log(Level.FINEST, "printer3 "+printer3);
 	}
 	
 	public static void startProducerAndConsumer() {
@@ -207,11 +206,11 @@ public class ThreadRunner {
 		Thread thread1 = new Thread(producer,"ProducerThread");
 		Thread thread2 = new Thread(consumer,"ConsumerThread1");
 		Thread thread3 = new Thread(consumer,"ConsumerThread2");
-		logger.debug("Starting thread ProducerThread");
+		logger.log(Level.FINEST, "Starting thread ProducerThread");
 		thread1.start();
-		logger.debug("Starting thread ConsumerThread1");
+		logger.log(Level.FINEST, "Starting thread ConsumerThread1");
 		thread2.start();
-		logger.debug("Starting thread ConsumerThread2");
+		logger.log(Level.FINEST, "Starting thread ConsumerThread2");
 		thread3.start();
 		try
 	      {
@@ -222,7 +221,7 @@ public class ThreadRunner {
 	      }
 		producer.setFinished(true);
 		consumer.setFinished(true);
-		logger.debug("Finished!"); 
+		logger.log(Level.FINEST, "Finished!"); 
 	}
 	
 	public static void startPrimeSievePrinters() {
@@ -236,7 +235,7 @@ public class ThreadRunner {
 		//Instead each Thread should have it's own sieve like this!
 		Thread thread1 = new Thread(new PrimeSieve(2000000),"Primes1Thread");
 		Thread thread2 = new Thread(new PrimeSieve(1000000),"Primes2Thread");
-		logger.debug("Starting thread Primes1Thread");
+		logger.log(Level.FINEST, "Starting thread Primes1Thread");
 		thread1.start();
 		
 		synchronized(app) {
@@ -244,12 +243,12 @@ public class ThreadRunner {
 			try {
 	        	Random rand = new Random();
 	        	int millis = rand.nextInt(10); 
-	        	logger.debug("main Thread waiting for "+millis+" msec");
+	        	logger.log(Level.FINEST, "main Thread waiting for "+millis+" msec");
 	        	app.wait(millis);
-	        	logger.debug("Starting thread Primes2Thread");
+	        	logger.log(Level.FINEST, "Starting thread Primes2Thread");
 				thread2.start();
 			} catch (InterruptedException e) {
-				logger.error("main Thread wait was interrupted!", e);
+				logger.log(Level.SEVERE, "main Thread wait was interrupted!", e);
 			}
 			
 		}
@@ -261,9 +260,9 @@ public class ThreadRunner {
 		FibonacciNumbers fibonacciNumbers = new FibonacciNumbers(500); 
 		Thread thread3 = new Thread(fibonacciNumbers,"Fibonacci1");
 		Thread thread4 = new Thread(fibonacciNumbers,"Fibonacci2");
-		logger.debug("Starting thread Fibonacci1");
+		logger.log(Level.FINEST, "Starting thread Fibonacci1");
 		thread3.start();
-		logger.debug("Starting thread Fibonacci2");
+		logger.log(Level.FINEST, "Starting thread Fibonacci2");
 		thread4.start();
 	}
 }

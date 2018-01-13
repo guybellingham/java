@@ -1,0 +1,3 @@
+rootProject.name = 'GUS_JAVA'
+//include 'test/cucumber'
+//project(":test/cucumber").name = "tt_dev_cucumber"

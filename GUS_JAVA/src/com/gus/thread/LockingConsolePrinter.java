@@ -1,10 +1,11 @@
 package com.gus.thread;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LockingConsolePrinter implements Runnable {
 	
-	private static final Logger logger = LogManager.getLogger(LockingConsolePrinter.class);
+	private static final Logger logger = Logger.getLogger("com.gus.thread");
 	
 	public LockingConsolePrinter(char character, SimpleLock lock) {
 		setCharacter(character);
@@ -19,9 +20,8 @@ public class LockingConsolePrinter implements Runnable {
 	public void run() {
 		Thread current = Thread.currentThread();
 		
-        if(logger.isDebugEnabled()) {
-			logger.debug(current.getName()+" running LockingConsolePrinter("+getCharacter()+") starting...");
-		}
+		logger.log(Level.FINEST, current.getName()+" running LockingConsolePrinter("+getCharacter()+") starting...");
+		
 
         while (!finished) {
         	//take the lock
@@ -45,9 +45,8 @@ public class LockingConsolePrinter implements Runnable {
         
         System.out.print('\n');
 		
-		if(logger.isDebugEnabled()) {
-        	logger.debug("LockingConsolePrinter("+getCharacter()+") finished.");
-        }
+        logger.log(Level.FINEST, "LockingConsolePrinter("+getCharacter()+") finished.");
+        
 	}
 
 	public char getCharacter() {

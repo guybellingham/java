@@ -1,0 +1,58 @@
+import java.nio.file.FileSystems
+import java.nio.file.Files
+
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.LineEvent
+
+void playSound(String sound) {
+    def playingDone = false
+    try {
+        def clip = AudioSystem.getClip()
+        java.nio.file.Path path = FileSystems.getDefault().getPath(project.projectDir.getAbsolutePath(), sound)
+        if (!Files.exists(path)) {
+            throw new FileNotFoundException("Could not find " + sound)
+        }
+        def audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(Files.newInputStream(path)))
+
+        clip.addLineListener({ event ->
+            def eventType = event.getType()
+            if (eventType == LineEvent.Type.STOP || eventType == LineEvent.Type.CLOSE) {
+                playingDone = true
+            }
+        })
+
+        clip.open(audioStream)
+        try {
+            clip.start()
+            while (!playingDone) {
+                sleep(100)
+            }
+            audioStream.close()
+        } finally {
+            clip.close()
+        }
+    } catch (Exception e) {
+        System.err.println(e.getMessage())
+    }
+}
+
+gradle.addBuildListener(new BuildAdapter() {
+
+            @Override
+            void buildFinished(BuildResult result) {
+                if (getProperty('notification_enabled').equals('true')) {
+                    if (result.failure) {
+                        announce.announce('BUILD FAILED:\n' + result.failure.message, 'local')
+                    } else {
+                        announce.announce('BUILD SUCCESSFUL', 'local')
+                    }
+                }
+                if (getProperty('sound_enabled').equals('true')) {
+                    if (result.failure) {
+                        playSound(getProperty('failure_sound'))
+                    } else {
+                        playSound(getProperty('success_sound'))
+                    }
+                }
+            }
+        })
