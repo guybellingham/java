@@ -13,6 +13,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -23,9 +24,13 @@ import com.google.common.collect.ImmutableSet;
 import com.gus.annotation.ColumnMapping;
 import com.gus.annotation.TableMapping;
 import com.gus.enumeration.ImmutableGlobalData;
-
+/**
+ * 
+ * @author guybe
+ * @see META-INF/services/javax.annotation.processing.Processor
+ */
 public class ImmutableGlobalDataAnnotationProcessor extends AbstractProcessor {
-
+	
 	private Types typeUtils;
 	private Elements elementUtils;
 	private Filer filer;
@@ -56,34 +61,62 @@ public class ImmutableGlobalDataAnnotationProcessor extends AbstractProcessor {
 	 */
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+
 		// Iterate over all @InternalGlobalData annotated elements
 	    for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(TableMapping.class)) {
+	    	warn(annotatedElement,"INFO:ImmutableGlobalDataAnnotationProcessor processing element kind=%s name=%s with @TableMapping",
+	    			annotatedElement.getKind(),
+	    			annotatedElement.getSimpleName());
 	    	// If this element represents an Enum then were good to go
 	  		if(annotatedElement.getKind() == ElementKind.ENUM) {
 	  			// Classes and enums are TypeElements
 	  			TypeElement enumElement = (TypeElement)annotatedElement;
 	  			// Ensure its public
 	  			if (!enumElement.getModifiers().contains(Modifier.PUBLIC)) {
-	  		      error(enumElement, "The enum %s is not public.",
+	  				error(enumElement, "The enum %s is not public.",
 	  		    		enumElement.getQualifiedName().toString());
-	  		      return false;
+	  		      	return false;
 	  		    }
-	  			// Check inheritance: enum must implement InternalEnumeration
+	  			// Ensure it implements ImmutableGlobalData
+	  			boolean ifaceNotFound = true;
 	  			List<? extends TypeMirror> interfaces = enumElement.getInterfaces();
-	  			if(interfaces.stream().anyMatch(i -> i.getClass().equals(ImmutableGlobalData.class))){
-	  				error(enumElement, "The enum %s must implement the %s interface.",
-		  		    		enumElement.getQualifiedName().toString(),
-		  		    		ImmutableGlobalData.class.getCanonicalName());
-		  		      return false;
+	  			for (TypeMirror iface : interfaces) {
+	  				if(iface.toString().startsWith(ImmutableGlobalData.class.getCanonicalName())) {
+	  					ifaceNotFound = false;
+	  				}	
+				}
+	  			if(ifaceNotFound) {
+	  				error(enumElement, "Enum must implement %s?",
+	  					ImmutableGlobalData.class.getCanonicalName());
+	  				return false;
 	  			}
+	  			
 	  			// Ensure there is a table name mapping
-	  			TableMapping annotation = enumElement.getAnnotation(TableMapping.class);
-	  		    String tablename = annotation.name();
+	  			TableMapping tableMapping = enumElement.getAnnotation(TableMapping.class);
+	  		    String tablename = tableMapping.name();
 	  		    if(Strings.isNullOrEmpty(tablename)) {
 	  		    	error(enumElement, "Enum annotated with @%s is missing table name?",
 		  					TableMapping.class.getSimpleName());
-		  		    return true; // Exit processing
+		  		    return false; // Exit processing?
 	  		    }
+	  		    for (Element enclosedElement : enumElement.getEnclosedElements()) {
+	  		    	if(enclosedElement.getKind() == ElementKind.FIELD) {
+	  		    		VariableElement fieldElement = (VariableElement)enclosedElement;
+	  		    		ColumnMapping columnMapping = fieldElement.getAnnotation(ColumnMapping.class);
+	  		    		if(columnMapping == null) {
+	  		  		    	error(enumElement, "Field \"%s\" is missing @%s annotation?",
+	  		  		    		fieldElement.getSimpleName(),
+	  		  		    		ColumnMapping.class.getSimpleName());
+	  		  		    }
+	  		    		String columnname = columnMapping.name();
+	  		    		if(Strings.isNullOrEmpty(columnname)) {
+	  		    			error(enumElement, "Field \"%s\" annotated with @%s is missing column name?",
+		  		  		    		fieldElement.getSimpleName(),
+		  		  		    		ColumnMapping.class.getSimpleName());
+	  		  		    }
+	  		    	}
+				}
+
 	  		} else {
 	  			// User annotated something else?
 	  			error(annotatedElement, "Only enums can be annotated with @%s",
@@ -100,7 +133,12 @@ public class ImmutableGlobalDataAnnotationProcessor extends AbstractProcessor {
 	    	String.format(msg, args),
 	    	e);
 	}
-	
+	private void warn(Element e, String msg, Object... args) {
+		messager.printMessage(
+		    	Kind.MANDATORY_WARNING,
+		    	String.format(msg, args),
+		    	e);
+	}
 	@Override
 	public Set<String> getSupportedAnnotationTypes() { 
 		return ImmutableSet.<String>of(

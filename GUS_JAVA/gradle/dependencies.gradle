@@ -216,12 +216,9 @@ dependencies {
         exclude module: 'sqlite-jdbc'
     }
 
-    globalDataProcessorJarDep "com.google.guava:guava:${guavaVersion}"
-    globalDataProcessorJarDep "org.apache.commons:commons-lang3:${commonsLangVersion}"
-    globalDataProcessorJarDep "commons-logging:commons-logging:${commonsLoggingVersion}"
-    globalDataProcessorJarDep "commons-codec:commons-codec:${commonsCodecVersion}"
-    globalDataProcessorJarDep "commons-io:commons-io:${commonsIoVersion}"
-
+    globalDataProcessorJarDep("com.google.guava:guava:${guavaVersion}") {
+        exclude module: 'j2objc-annotations'
+    }
 
     cucumber "info.cukes:cucumber-picocontainer:${cucumberVersion}"
 

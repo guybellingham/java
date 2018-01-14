@@ -27,7 +27,8 @@ public enum InternalPermissionType implements ImmutableGlobalData<InternalPermis
 	STAFF_DIRECTLY(8,"Staff Directly"), 
 	DELETE_9(9,"Delete"),
 	DETAILS_20(20,"Details"),
-	ATTACHMENTS_46(46,"Attachments")
+	ATTACHMENTS_46(46,"Attachments"),
+	PRISON(47,"Prison")
 	;
 	@ColumnMapping(name="PERMISSION_TYPE_ID")
 	private int id;

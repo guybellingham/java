@@ -5,7 +5,7 @@ import com.gus.nio.FileServicesImpl;
 
 public enum Services {
 	File(FileServices.class,FileServicesImpl.class),
-	Map(null,null),  
+	Map(Object.class,Object.class),  
 	Geocoding(AddressGeocoding.class,AddressGeocodingService.class),
 	Timezone(LatLongTimezone.class,LatLongTimezoneService.class),
 	Regsitration(UserRegistration.class,UserRegistrationService.class);

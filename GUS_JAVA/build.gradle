@@ -70,9 +70,8 @@ sourceSets {
             srcDir 'src'
             include 'com/gus/annotation/*.java'
             include 'com/gus/annotation/**/*.java'
-            include 'com/gus/enumeration/*.java'
+            include 'com/gus/enumeration/ImmutableGlobalData.java'
             compileClasspath += main.output
-            runtimeClasspath += main.output
         }
         resources {
             srcDir 'src'
