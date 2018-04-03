@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="postgres-jdbc-162312e06e0-6a33691691f2a1e5" provider="postgresql" driver="postgres-jdbc" name="DEVVM - postgres" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="devvm" port="5432" server="" database="devvm" url="jdbc:postgresql://devvm:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
+			<property name="connectTimeout" value="20"/>
+			<property name="loginTimeout" value="20"/>
+			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
+			<provider-property name="@dbeaver-switch-db-on-expand@" value="true"/>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="authType" value="PASSWORD"/>
+				<property name="port" value="22"/>
+			</network-handler>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
+			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
+			<bootstrap defaultObject="devvm"/>
+		</connection>
+	</data-source>
+	<filters/>
+</data-sources>

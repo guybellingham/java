@@ -1,5 +1,12 @@
 package com.gus.annotation.processor;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +31,7 @@ import com.google.common.collect.ImmutableSet;
 import com.gus.annotation.ColumnMapping;
 import com.gus.annotation.TableMapping;
 import com.gus.enumeration.ImmutableGlobalData;
+
 /**
  * 
  * @author guybe
@@ -125,6 +133,38 @@ public class ImmutableGlobalDataAnnotationProcessor extends AbstractProcessor {
 	  		}
 	    }
 		return false;
+	}
+	
+	List<Class<GlobalImmutableData>> getGlobalImmutableDataClasses(String packageName) {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		assertNotNull("No class loader?", classLoader);
+		
+		URL root = Thread.currentThread().getContextClassLoader().getResource(packageName.replace(".", "/"));
+		assertNotNull("No root URL for package name "+packageName+"?", root);
+		// Filter .class files.
+		File[] files = new File(root.getFile()).listFiles(new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.endsWith(".class");
+		    }
+		});
+		assertNotNull("No *.class files for package name "+packageName+"?", files);
+		assertFalse("No *.class files for package name "+packageName+"?",files.length < 1);
+		List<Class<GlobalImmutableData>> classes = new ArrayList<>();
+		// Find classes implementing GlobalImmutableData.
+		for (File file : files) {
+		    String className = file.getName().replaceAll(".class$", "");
+		    Class<?> cls = null;
+			try {
+				cls = Class.forName(packageName + "." + className);
+				if (GlobalImmutableData.class.isAssignableFrom(cls)) {
+			    	classes.add((Class<GlobalImmutableData>) cls);
+			    }
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		    
+		}
+		return classes;
 	}
 	
 	private void error(Element e, String msg, Object... args) {
