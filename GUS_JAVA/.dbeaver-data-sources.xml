@@ -6,15 +6,90 @@
 			<property name="loginTimeout" value="20"/>
 			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
 			<provider-property name="@dbeaver-switch-db-on-expand@" value="true"/>
+			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
 			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
 				<property name="sshConnectTimeout" value="10000"/>
-				<property name="authType" value="PASSWORD"/>
 				<property name="port" value="22"/>
+				<property name="authType" value="PASSWORD"/>
 			</network-handler>
 			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
 				<property name="socks-port" value="1080"/>
 			</network-handler>
+			<bootstrap defaultObject="devvm"/>
+		</connection>
+		<virtual-meta-data>
+			<container name="model">
+				<container name="devvm">
+					<container name="arena">
+						<entity name="t_alert_event">
+							<constraint name="PRIMARY" type="VIRTUAL KEY">
+								<attribute name="alert_event_id"/>
+								<attribute name="ttcustomer_id"/>
+								<attribute name="current_entry"/>
+								<attribute name="modify_date"/>
+								<attribute name="entity_type_id"/>
+								<attribute name="is_active"/>
+								<attribute name="event_id"/>
+								<attribute name="scheduled_job_id"/>
+								<attribute name="modified_by"/>
+								<attribute name="created_by"/>
+								<attribute name="create_date"/>
+								<attribute name="alert_subject"/>
+								<attribute name="alert_message"/>
+								<attribute name="send_to"/>
+								<attribute name="resource_filter_id"/>
+								<attribute name="alert_importance"/>
+							</constraint>
+						</entity>
+						<entity name="t_scheduled_job">
+							<constraint name="PRIMARY" type="VIRTUAL KEY">
+								<attribute name="ttcustomer_id"/>
+								<attribute name="job_id"/>
+								<attribute name="job_type"/>
+								<attribute name="title"/>
+								<attribute name="occurrences"/>
+								<attribute name="end_date"/>
+								<attribute name="period"/>
+								<attribute name="interval_value"/>
+								<attribute name="hour"/>
+								<attribute name="minute"/>
+								<attribute name="second"/>
+								<attribute name="day_of_month"/>
+								<attribute name="weekdays"/>
+								<attribute name="month"/>
+								<attribute name="next_run"/>
+								<attribute name="last_run"/>
+								<attribute name="current_entry"/>
+								<attribute name="created_by"/>
+								<attribute name="modified_by"/>
+								<attribute name="modify_date"/>
+								<attribute name="schedule_type"/>
+								<attribute name="interval_unit"/>
+								<attribute name="nice_value"/>
+								<attribute name="parameter_map"/>
+								<attribute name="create_date"/>
+								<attribute name="time_zone"/>
+								<attribute name="is_active"/>
+							</constraint>
+						</entity>
+					</container>
+				</container>
+			</container>
+		</virtual-meta-data>
+	</data-source>
+	<data-source id="postgres-jdbc-162dea3f3c4-e8e6a9f6cabad36" provider="postgresql" driver="postgres-jdbc" name="F3S2 - devvm" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="f3s2.innotas.io" port="5432" server="" database="devvm" url="jdbc:postgresql://f3s2.innotas.io:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
+			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
+			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
 			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="port" value="22"/>
+				<property name="authType" value="PASSWORD"/>
+			</network-handler>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
 			<bootstrap defaultObject="devvm"/>
 		</connection>
 	</data-source>
