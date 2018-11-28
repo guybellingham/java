@@ -40,5 +40,10 @@ public class ComparableBean implements Comparable<ComparableBean>{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+	public String toString() {
+		return new StringBuilder("{")
+				.append("id:").append(getId())
+				.append(", desc:\"").append(getDescription()).append("\"")
+				.append("}").toString();
+	}
 }

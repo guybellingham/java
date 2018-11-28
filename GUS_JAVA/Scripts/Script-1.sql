@@ -3,7 +3,13 @@ select arena.set_pa_ctxt('admin', null);
 SET default_tablespace = arena_data;
 
 SET ROLE arena;
+REFRESH materialized view arenaadmin.mv_ts_res_sum_by_type; 
+REFRESH materialized view arenaadmin.mv_ts_period_sum_by_type; 
 
+--Zdemo gold ttcustomer_id = 1714159772
+
+select count(*) from arena.t_internal_ttobject_method;
+--where filter_visibility = 0; 
 
 DROP VIEW arena.all_gate;
 DROP VIEW arenaadmin.all_gate;
@@ -12,6 +18,17 @@ ALTER TABLE t_gate
 ADD COLUMN alert_event_id NUMERIC(38);
 ALTER TABLE ht_gate
 ADD COLUMN alert_event_id NUMERIC(38);
+
+ALTER TABLE arena.cu_page_view ALTER view_name TYPE varchar(1000);
+ALTER TABLE arena.t_gate DROP COLUMN approver_id;
+ALTER TABLE arena.t_internal_calculation_type 
+  ALTER COLUMN current_entry TYPE NUMERIC(1); 
+ALTER TABLE arena.t_internal_calculation_type
+  ADD CONSTRAINT chk_internal_calculation_type_current_entry CHECK ((current_entry = ANY(ARRAY[(0)::NUMERIC, (1)::NUMERIC])));  
+ALTER TABLE arena.t_internal_calculation_type
+ DROP CONSTRAINT chk_internal_calculation_type_current_entry;
+ALTER TABLE arena.t_internal_ttobject_method DROP COLUMN report_title_template; 
+ALTER TABLE arena.t_internal_ttobject_method ADD COLUMN report_title_template varchar(80);
 
 CREATE OR REPLACE VIEW arena.all_gate AS
   SELECT 1 AS current_entry, g.* FROM arena.t_gate g
