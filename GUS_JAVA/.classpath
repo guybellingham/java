@@ -2,7 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.glassfish.hk2/hk2-locator/2.5.0-b42/9d6edc0cb226401a8316e67d81bfc37cb626ef91/hk2-locator-2.5.0-b42.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.glassfish.hk2/hk2-locator/2.5.0-b42/3ce1b8cbc53d115c0df6e4e38819fa6d36631496/hk2-locator-2.5.0-b42-sources.jar">
 		<attributes>
@@ -64,16 +68,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.poi/poi-ooxml/3.16/76e20fe22404cc4da55ddfdaaaadee32bbfa3bdd/poi-ooxml-3.16.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.poi/poi-ooxml/3.16/b85d1cda3d8189599c58517e53e64cf3dc9caee0/poi-ooxml-3.16-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.poi/poi/3.16/ad21c123ee5d6b5b2a8f0d4ed23b3ffe6759a889/poi-3.16.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.poi/poi/3.16/da13be01502c91f61b531c80e5fc7aaf6c49200c/poi-3.16-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/bce4ba84fd527950e35040b20a991c63e90e2850/commons-codec-1.11-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -129,11 +123,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.poi/poi-ooxml-schemas/3.16/9828a49307fc6bebfd42185b677d88b6e4994c63/poi-ooxml-schemas-3.16.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/net.jawr/jawr/3.3.3/76ac4745224ec2e97f4dd0934377c9d48e5ab491/jawr-3.3.3.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/net.jawr/jawr/3.3.3/f74835a9434c21013b9eb94ca92d3de26a510602/jawr-3.3.3-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -147,31 +136,6 @@
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/javax.validation/validation-api/2.0.0.Final/4a7ff48084bd336c4de1f79f027f6f77badf399e/validation-api-2.0.0.Final.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/javax.validation/validation-api/2.0.0.Final/112486c576959bda5d57c1815af62fbee2621b55/validation-api-2.0.0.Final-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper/8.0.38/d9a167924ee593cbc13eaf25cbebc4f06c93ffae/tomcat-jasper-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper/8.0.38/13b1eca53c35c9fab6822e089826dfc6517eddce/tomcat-jasper-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jsp-api/8.0.38/7886305cf5ddc310ed7c41c9faa92b75172352eb/tomcat-jsp-api-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jsp-api/8.0.38/7bc422ea2c71da526d2c408611a6ee36e76f455a/tomcat-jsp-api-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/8.0.38/b84530784e3b52f3ab30224bf8793ac49b7e0473/tomcat-util-scan-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/8.0.38/fae44594209e2bd44cdbf7e6d3d2ffaee2de7f43/tomcat-util-scan-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-api/8.0.38/aefd109bf7b8fe43970e96844954af737456e783/tomcat-api-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-api/8.0.38/c8575325e5d6c935ba148b3e2e9ba418637a1125/tomcat-api-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/8.0.38/3043a227d3af041fee442560f6420e56f44be764/tomcat-servlet-api-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/8.0.38/9e2f69c2c37b078564db1930b154a5da719d6e6e/tomcat-servlet-api-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.1.3/39b109f2cd352b2d71b52a3b5a1a9850e1dc304b/error_prone_annotations-2.1.3.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.1.3/990fe1fd48078a2befecdfcebcad8e6e1bd195a0/error_prone_annotations-2.1.3-sources.jar">
@@ -189,26 +153,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.github.virtuald/curvesapi/1.04/3386abf821719bc89c7685f9eaafaf4a842f0199/curvesapi-1.04.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.github.virtuald/curvesapi/1.04/5c01708d122c6a61e90716e931b58226d8261312/curvesapi-1.04-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.xmlbeans/xmlbeans/2.6.0/29e80d2dd51f9dcdef8f9ffaee0d4dc1c9bbfc87/xmlbeans-2.6.0.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor/2.6.7/ba9e74b11135b18248e960df657a2b86ae77a079/jackson-dataformat-cbor-2.6.7.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor/2.6.7/6d66bfcb6c02f68161190ebc98407ac17ce47bb2/jackson-dataformat-cbor-2.6.7-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.9.0/7c10d545325e3a6e72e06381afe469fd40eb701/jackson-annotations-2.9.0.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.9.0/a0ad4e203304ccab7e01266fa814115850edb8a9/jackson-annotations-2.9.0-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.fasterxml.woodstox/woodstox-core/5.0.3/10aa199207fda142eff01cd61c69244877d71770/woodstox-core-5.0.3.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.fasterxml.woodstox/woodstox-core/5.0.3/f38482e8b060d9e5354c10103f4c4db53c58db7d/woodstox-core-5.0.3-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -222,31 +166,6 @@
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/javax.ws.rs/javax.ws.rs-api/2.1/426a0862406536e690c7caa8bb6ed32191986fac/javax.ws.rs-api-2.1.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/javax.ws.rs/javax.ws.rs-api/2.1/b693d737250f57da3bbc0fbfccf6917de18ae200/javax.ws.rs-api-2.1-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/8.0.38/43111eebaba03b59a19b8602bd5acb1846b1a1e3/tomcat-jasper-el-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/8.0.38/ebb1fb4c3ed9c6662f4e4be8b2adb5e5b4e389c3/tomcat-jasper-el-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-el-api/8.0.38/e996dfb99d4f77b7bafad07717abc0f1a53e171c/tomcat-el-api-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-el-api/8.0.38/32532c89334f639ae57cc22a28ecf6644c996722/tomcat-el-api-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util/8.0.38/afac2f42b5afebcd494f60a9c34c8f4c061ce596/tomcat-util-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util/8.0.38/42e645e207594b629fd50a0d739604d69f349664/tomcat-util-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/8.0.38/ee1c7166b729819893aee479ade427a3ae80ba17/tomcat-juli-8.0.38.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/8.0.38/632d84dedc5067eeba3de1fa84fd7cf43fb08997/tomcat-juli-8.0.38-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5/6ee0a678915ddac550d9187c896be6cb76f5cd2f/ecj-4.5.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5/605afafcfc21aba2737db74522572025fd7a5098/ecj-4.5-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/3.2.2/8ad72fe39fa8c91eaaf12aadb21e0c3661fe26d5/commons-collections-3.2.2.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/3.2.2/78c50ebda5784937ca1615fc0e1d0cb35857d572/commons-collections-3.2.2-sources.jar">
@@ -389,11 +308,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.thedeanda/lorem/1.2/81d7c67059961e66ca7a851a875a6a6f2a9cc3bf/lorem-1.2.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/com.thedeanda/lorem/1.2/da74d1c2b5265d82f4a71da2138027f560ee8e7c/lorem-1.2-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.10.19/539df70269cc254a58cccc5d8e43286b4a73bf30/mockito-all-1.10.19.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.10.19/8269667b73d9616600359a9b0ba1b1c7d0cf7a97/mockito-all-1.10.19-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
@@ -405,11 +319,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/info.cukes/cucumber-core/1.2.5/7255a9d8e0c3b0f9e3cd80503c91c2b088b3d9b5/cucumber-core-1.2.5.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/info.cukes/cucumber-core/1.2.5/c4fee6de8487b287994b917624d3ad1ede52a4ca/cucumber-core-1.2.5-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar" sourcepath="C:/Users/guybe/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/ab3976d4574c48d22dc1abf6a9e8bd0fdf928223/javax.servlet-api-3.1.0-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
@@ -465,7 +374,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/dozer-5.5.1.jar"/>
-	<classpathentry kind="lib" path="lib/aws-java-sdk-1.11.134.jar"/>
 	<classpathentry kind="src" path="generated_src">
 		<attributes>
 			<attribute name="optional" value="true"/>
@@ -475,5 +383,32 @@
 	<classpathentry kind="lib" path="lib/gson-2.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/javapoet-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/guava-24.0-jre.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.14-20160307.jar"/>
+	<classpathentry kind="lib" path="lib/poi-ooxml-3.14-20160307.jar"/>
+	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-3.14-20160307.jar"/>
+	<classpathentry kind="lib" path="lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-athena-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-core-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-dynamodb-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-elasticsearch-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-kms-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-opensdk-1.11.337.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-route53-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-s3-1.11.359.jar"/>
+	<classpathentry kind="lib" path="lib/aws-request-signing-apache-interceptor-b3772780da.jar"/>
+	<classpathentry kind="lib" path="lib/elasticsearch-6.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/elasticsearch-core-6.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/elasticsearch-rest-client-6.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/elasticsearch-rest-high-level-client-6.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/elasticsearch-secure-sm-6.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/elasticsearch-x-content-6.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/httpasyncclient-4.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.4.8.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.10.jar"/>
+	<classpathentry kind="lib" path="lib/aws-java-sdk-sqs-1.11.359.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -77,8 +77,8 @@
 			</container>
 		</virtual-meta-data>
 	</data-source>
-	<data-source id="postgres-jdbc-162dea3f3c4-e8e6a9f6cabad36" provider="postgresql" driver="postgres-jdbc" name="F3S2 - devvm" save-password="true" show-system-objects="true" read-only="false">
-		<connection host="f3s2.innotas.io" port="5432" server="" database="devvm" url="jdbc:postgresql://f3s2.innotas.io:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
+	<data-source id="postgres-jdbc-162dea3f3c4-e8e6a9f6cabad36" provider="postgresql" driver="postgres-jdbc" name="F11S2 - devvm" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="f11s2.innotas.net" port="5432" server="" database="devvm" url="jdbc:postgresql://f11s2.innotas.net:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
 			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
 			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
 			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
@@ -87,6 +87,63 @@
 				<property name="port" value="22"/>
 				<property name="authType" value="PASSWORD"/>
 			</network-handler>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
+			<bootstrap defaultObject="devvm"/>
+		</connection>
+	</data-source>
+	<data-source id="postgres-jdbc-1682990c9fe-64a1e2a3bdcf3acb" provider="postgresql" driver="postgres-jdbc" name="QA" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="cl-qa.cluster-cosjwfsfjpjn.us-west-2.rds.amazonaws.com" port="5432" server="" database="qa01" url="jdbc:postgresql://cl-qa.cluster-cosjwfsfjpjn.us-west-2.rds.amazonaws.com:5432/qa01" user="arena" password="EQgDJU9XJPc=" type="dev">
+			<property name="connectTimeout" value="20"/>
+			<property name="loginTimeout" value="20"/>
+			<provider-property name="@dbeaver-show-non-default-db@" value="false"/>
+			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="port" value="22"/>
+				<property name="authType" value="PASSWORD"/>
+			</network-handler>
+			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
+			<bootstrap defaultObject="devvm"/>
+		</connection>
+	</data-source>
+	<data-source id="postgres-jdbc-1685810ca69-6fc66b6656d8578d" provider="postgresql" driver="postgres-jdbc" name="F3S2" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="f3s2.innotas.net" port="5432" server="" database="devvm" url="jdbc:postgresql://f3s2.innotas.net:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
+			<property name="connectTimeout" value="20"/>
+			<property name="loginTimeout" value="20"/>
+			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
+			<provider-property name="@dbeaver-show-template-db@" value="false"/>
+			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
+			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="port" value="22"/>
+				<property name="implementation" value="jsch"/>
+				<property name="authType" value="PASSWORD"/>
+			</network-handler>
+			<bootstrap defaultObject="devvm"/>
+		</connection>
+	</data-source>
+	<data-source id="postgres-jdbc-1694f242b79-2c5d603bda920e63" provider="postgresql" driver="postgres-jdbc" name="devvm2-new" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="devvm2-new-cluster.cluster-cosjwfsfjpjn.us-west-2.rds.amazonaws.com" port="5432" server="" database="devvm" url="jdbc:postgresql://devvm2-new-cluster.cluster-cosjwfsfjpjn.us-west-2.rds.amazonaws.com:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
+			<property name="connectTimeout" value="20"/>
+			<property name="loginTimeout" value="20"/>
+			<provider-property name="@dbeaver-show-non-default-db@" value="false"/>
+			<provider-property name="@dbeaver-show-template-db@" value="false"/>
+			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="authType" value="PASSWORD"/>
+				<property name="port" value="22"/>
+			</network-handler>
+			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
 			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
 				<property name="socks-port" value="1080"/>
 			</network-handler>
