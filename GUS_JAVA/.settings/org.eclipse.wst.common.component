@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-	<wb-module deploy-name="GUS_JAVA">
-		<property name="context-root" value="GUS_JAVA"/>
-		<wb-resource deploy-path="/WEB-INF/classes" source-path="src"/>
+    	
+    <wb-module deploy-name="GUS_JAVA">
+        		
+        <property name="context-root" value="GUS_JAVA"/>
+        		
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="src"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/generated_src"/>
-	</wb-module>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/module.one"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/module.two"/>
+        	
+    </wb-module>
+    
 </project-modules>

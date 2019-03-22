@@ -1,0 +1,4 @@
+-d outDir --module-source-path D:\workspace\java\GUS_JAVA\modules 
+ D:\workspace\java\GUS_JAVA\modules\app\com\gus\app\MainApp.java
+ D:\workspace\java\GUS_JAVA\modules\hello\com\gus\hello\IHello.java
+ D:\workspace\java\GUS_JAVA\modules\hello\com\gus\hello\HelloImpl.java  
