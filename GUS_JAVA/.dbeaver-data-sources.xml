@@ -140,13 +140,33 @@
 			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
 			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
 				<property name="sshConnectTimeout" value="10000"/>
-				<property name="authType" value="PASSWORD"/>
 				<property name="port" value="22"/>
+				<property name="authType" value="PASSWORD"/>
 			</network-handler>
 			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
 			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
 				<property name="socks-port" value="1080"/>
 			</network-handler>
+			<bootstrap defaultObject="devvm"/>
+		</connection>
+	</data-source>
+	<data-source id="postgres-jdbc-16a9e5bd457-672eea4fd385bfd6" provider="postgresql" driver="postgres-jdbc" name="F7S2" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="f7s2.innotas.net" port="5432" server="" database="devvm" url="jdbc:postgresql://f7s2.innotas.net:5432/devvm" user="arena" password="GgoIL1VCV3bk" type="dev">
+			<property name="connectTimeout" value="20"/>
+			<property name="loginTimeout" value="20"/>
+			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
+			<provider-property name="@dbeaver-show-template-db@" value="false"/>
+			<provider-property name="@dbeaver-switch-db-on-expand@" value="false"/>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="authType" value="PASSWORD"/>
+				<property name="port" value="22"/>
+				<property name="implementation" value="jsch"/>
+			</network-handler>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
+			<network-handler type="CONFIG" id="postgre_ssl" enabled="false" save-password="false"/>
 			<bootstrap defaultObject="devvm"/>
 		</connection>
 	</data-source>
