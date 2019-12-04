@@ -3,9 +3,8 @@ package com.gus.util;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -49,7 +48,7 @@ import org.dozer.Mapper;
  * @param <T> the class of the <code>to</code> Javabean.
  */
 public class DtoMapper<F,T> {
-	private static final Log log = LogFactory.getLog(DtoMapper.class);
+	private static final Logger log = Logger.getLogger(DtoMapper.class.getName());
 	private Mapper mapper;
 	private String mappingFile;
 	/**
@@ -65,9 +64,9 @@ public class DtoMapper<F,T> {
 	 */
 	public DtoMapper(String dozerMappingFile){
 		setMappingFile(dozerMappingFile);
-		if(log.isDebugEnabled()) {
-			log.debug("Constructing DtoMapper with config filename="+dozerMappingFile);
-		}
+
+		log.warning("Constructing DtoMapper with config filename="+dozerMappingFile);
+		
 		if(null!=mappingFile && !mappingFile.isEmpty()){
 			List<String> configFiles = new ArrayList<String>();
 			configFiles.add(mappingFile);
@@ -86,9 +85,9 @@ public class DtoMapper<F,T> {
 		assert(null!=from);
 		assert(null!=clazz);
 		T to = getMapper().map(from, clazz);
-		if(log.isDebugEnabled()) {
-			log.debug("mapTo(from="+from+",to="+to+")");
-		}
+		
+		log.warning("mapTo(from="+from+",to="+to+")");
+		
 		return to;
 	}
 	/**

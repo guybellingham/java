@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 public class BusinessBean1 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Log logger = LogFactory.getLog(BusinessBean1.class);
+	private static final Logger logger = Logger.getLogger(BusinessBean1.class.getName());
 	
 	public static final String NAME = "BusinessBean1";
 	public static final Integer[] PRIMES = {new Integer(1),new Integer(3),new Integer(5),new Integer(7),new Integer(11)};

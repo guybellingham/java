@@ -27,8 +27,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openjdk.tools.sjavac.Log;
-
 
 public final class FileServicesImpl implements FileServices {
 
