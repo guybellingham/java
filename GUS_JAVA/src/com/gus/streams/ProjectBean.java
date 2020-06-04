@@ -1,13 +1,15 @@
 package com.gus.streams;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 /**
  * Simple bean for defining a 'project' that someone can play a role on.
  * @author Guy
  *
  */
-public class ProjectBean implements Serializable {
+public class ProjectBean implements Serializable, Comparable<ProjectBean> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -15,10 +17,14 @@ public class ProjectBean implements Serializable {
 	 * A unique id for this type of Role.
 	 */
 	private long projectId;
+	
+	private double budget;
+	
 	/**
 	 * A project <i>always</i> has a name and description.
 	 */
 	private String name, description;
+	
 	/**
 	 * Whether this project is in planning mode, in-progress, ended ..etc.
 	 */
@@ -28,8 +34,12 @@ public class ProjectBean implements Serializable {
 	 */
 	private Date startDate, endDate;
 	
-	public ProjectBean(long id, String name, String desc, ProjectStatus status, Date startDate, Date endDate) {
+	private DateFormat sdf = DateFormat.getDateInstance(DateFormat.SHORT);
+	private NumberFormat nmf = NumberFormat.getCurrencyInstance();
+	
+	public ProjectBean(long id, double budget, String name, String desc, ProjectStatus status, Date startDate, Date endDate) {
 		setProjectId(id);
+		setBudget(budget);
 		setName(name);
 		setDescription(desc);
 		setStatus(status);
@@ -40,10 +50,9 @@ public class ProjectBean implements Serializable {
 	public String toString() {
 		return "{ \"projectId\":"+projectId+
 				", \"name\":"+name+
-				", \"description\":"+description+
+				", \"budget\":"+nmf.format(budget)+	
 				", \"status\":"+status+
-				", \"startDate\":"+startDate+
-				", \"endDate\":"+endDate+
+				", \"startDate\":"+sdf.format(startDate)+
 				" }";
 	}
 	
@@ -68,7 +77,13 @@ public class ProjectBean implements Serializable {
 	public void setProjectId(long roleId) {
 		this.projectId = roleId;
 	}
+	public double getBudget() {
+		return budget;
+	}
 
+	public void setBudget(double budget) {
+		this.budget = budget;
+	}
 	public String getDescription() {
 		return description;
 	}
@@ -114,6 +129,13 @@ public class ProjectBean implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	/**
+	 * Natural ordering is by projectId.
+	 */
+	@Override
+	public int compareTo(ProjectBean other) {		
+		return (int) (getProjectId() - other.getProjectId());
 	}
 
 }

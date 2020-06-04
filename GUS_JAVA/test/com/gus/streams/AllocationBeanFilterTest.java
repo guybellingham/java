@@ -104,14 +104,14 @@ public class AllocationBeanFilterTest {
 		int index = 0; 
 		Random rand = new Random();
 		long id = Math.round(rand.nextDouble() * 999999);
-		projects.add(new ProjectBean(id,"Project A","Project in APPROVAL phase",ProjectStatus.APPROVAL,SNY,SNY12));
-		projects.add(new ProjectBean(id+=13,"Project F","Project in FEASIBILITY phase",ProjectStatus.FEASIBILITY,SNY,SNY12));
-		projects.add(new ProjectBean(id+=13,"Project I","Project in INVESTIGATION phase",ProjectStatus.INVESTIGATION,SNY,SNY12));
-		projects.add(new ProjectBean(id+=13,"Project O","Project in ONHOLD",ProjectStatus.ONHOLD,SNY,SNY12));
-		projects.add(new ProjectBean(id+=13,"Project T","Project is TERMINATED",ProjectStatus.TERMINATED,SNY,SNY12));
+		projects.add(new ProjectBean(id,     740000.00D, "Project A","Project in APPROVAL phase",ProjectStatus.APPROVAL,SNY,SNY12));
+		projects.add(new ProjectBean(id+=13, 540350.50D, "Project F","Project in FEASIBILITY phase",ProjectStatus.FEASIBILITY,SNY,SNY12));
+		projects.add(new ProjectBean(id+=13, 1245750.50D, "Project I","Project in INVESTIGATION phase",ProjectStatus.INVESTIGATION,SNY,SNY12));
+		projects.add(new ProjectBean(id+=13, 400350D, "Project O","Project in ONHOLD",ProjectStatus.ONHOLD,SNY,SNY12));
+		projects.add(new ProjectBean(id+=13, 530250.00D, "Project T","Project is TERMINATED",ProjectStatus.TERMINATED,SNY,SNY12));
 		for (index = 4; index < size; index++) {
 			id+=13;
-			projects.add( new ProjectBean(id, "Project "+id, "Description "+id,ProjectStatus.INPROGRESS,startCalendar.getTime(),endCalendar.getTime()) );
+			projects.add( new ProjectBean(id, 100000.00D, "Project "+id, "Description "+id,ProjectStatus.INPROGRESS,startCalendar.getTime(),endCalendar.getTime()) );
 			startCalendar.add(Calendar.DAY_OF_YEAR, days);
 			endCalendar.add(Calendar.DAY_OF_YEAR, days);	
 		}
