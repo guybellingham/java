@@ -44,8 +44,8 @@
 	<classpathentry kind="lib" path="lib/elasticsearch-rest-high-level-client-6.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/elasticsearch-secure-sm-6.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/elasticsearch-x-content-6.4.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpasyncclient-4.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/httpclient-4.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.4.8.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-nio-4.4.10.jar"/>
 	<classpathentry kind="lib" path="lib/aws-java-sdk-sqs-1.11.359.jar"/>
