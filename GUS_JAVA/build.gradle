@@ -1,7 +1,6 @@
 plugins {
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
     id 'org.hidetake.ssh' version '2.9.0'
-    id "org.inferred.processors" version "1.2.15"
 }
 
 repositories { 
@@ -20,9 +19,6 @@ def forkEveryTest = 1
 configurations {
     perJvmTestCompile.extendsFrom testCompile
     perJvmTestRuntime.extendsFrom testRuntime
-    globalDataProcessorJarCompile.extendsFrom compile
-    globalDataProcessorJarDep
-    processor
     ssh
     datapimp
     cucumber
@@ -66,18 +62,16 @@ sourceSets {
             runtimeClasspath += main.output + test.output
         }
     }
- 
-    globalDataProcessorJar {
+    
+    minefieldJar {
         java {
             srcDir 'src'
-            include 'com/gus/annotation/*.java'
-            include 'com/gus/annotation/**/*.java'
-            include 'com/gus/enumeration/ImmutableGlobalData.java'
+            include 'com/gus/minefield/*.java'
             compileClasspath += main.output
         }
         resources {
             srcDir 'src'
-            include 'META-INF/services/javax.annotation.processing.Processor'
+            include 'com/gus/minefield/*.txt'
         }
     }
 }
@@ -88,15 +82,10 @@ eclipse {
             configurations.perJvmTestCompile,
             configurations.cucumber
         ]
-        sourceSets -= [
-            sourceSets.globalDataProcessorJar,
-        ]
+        
     }
 }
 
-processors {
-    project.eclipse.processors.outputDir = project.file('generated_src')
-}
 
 task cleanGenerated(type: Delete) {
     group 'Build'
@@ -148,11 +137,6 @@ task copyCompileLibs(type: Copy) {
     from configurations.compile
 }
 
-task copyProcessorLibs(type: Copy) {
-    into file("${project.buildDir}/lib/processor")
-    from configurations.processor
-}
-
 task copyRuntimeLibs(type: Copy) {
     into file("${project.buildDir}/lib/runtime")
     from configurations.runtime
@@ -189,7 +173,6 @@ tasks.withType(Javadoc) {
 
 task copyLibs(dependsOn: [
         'copyCompileLibs',
-        'copyProcessorLibs',
         'copyRuntimeLibs',
         'copyTestCompileLibs',
         'copyTestCucumberLibs',
@@ -199,7 +182,6 @@ task copyLibs(dependsOn: [
 
 // Set up compile to depend on delete and rest to depend on compile so that delete is done first
 copyCompileLibs.dependsOn deleteAggregateLibs
-copyProcessorLibs.dependsOn copyCompileLibs
 copyRuntimeLibs.dependsOn copyCompileLibs
 copyTestCompileLibs.dependsOn copyCompileLibs
 copyTestCucumberLibs.dependsOn copyCompileLibs
@@ -222,115 +204,6 @@ task prepareGeneratedSrcDir {
     }
 }
 
-task compileGeneratedSrc (type: JavaCompile, dependsOn: prepareGeneratedSrcDir) {
-    group 'build'
-    description 'Generate source from annotation processors and place in build directory'
-    project.file(generatedSrc).mkdirs()
-    source = sourceSets.main.allJava
-    classpath = configurations.compile
-    destinationDir = sourceSets.main.output.classesDirs[0]
-    options.sourcepath = sourceSets.main.java.sourceDirectories
-    options.annotationProcessorPath = configurations.processor
-    options.compilerArgs = ['-proc:only', '-s', generatedSrc]
-}
-
-// TODO(Barry): find all dependencies
-task compileDatapimp (type: JavaCompile, dependsOn: compileGeneratedSrc) {
-    group 'build'
-    description 'Compile datapimp classes (WIP - Does not work yet)'
-    source = fileTree(dir: 'src').plus(fileTree(dir: generatedSrc))
-    includes = ['com/innotas/tools/datapimp/**/*.java',
-        'com/innotas/tools/datapimp/**/*.properties',
-        'com/innotas/tools/datapimp/**/*.txt',
-        'com/innotas/tools/datapimp/**/*.sql',
-        generatedSrc + "/**/*.java",
-        'com/innotas/aws/s3/**/*.java',
-        'com/innotas/business/preference/UserSelectedPreferenceName.java',
-        'com/innotas/business/util/ArraySubList.java',
-        'com/innotas/business/util/SubList.java',
-        'com/innotas/dagger/delegate/STD.java',
-        'com/innotas/date/TTInstant.java',
-        'com/innotas/date/TTLocalDate.java',
-        'com/innotas/date/TTLocalDateTime.java',
-        'com/innotas/filter/FilterUtils.java',
-        'com/innotas/filter/IFilter.java',
-        'com/innotas/report/history/HistoryType.java',
-        'com/innotas/util/InnotasContext.java',
-        'com/innotas/util/ImageUtil.java',
-        'com/innotas/util/RequestCache.java',
-        'services/objects/ServerInfoResponse.java',
-        'tt/access/PermissionCacheService.java',
-        'tt/access/PermissionSet.java',
-        'tt/busobj/Account.java',
-        'tt/busobj/DateConversionSupport.java',
-        'tt/busobj/Engagement.java',
-        'tt/busobj/HumanResource.java',
-        'tt/busobj/IntakeItem.java',
-        'tt/busobj/InternalTsPeriod.java',
-        'tt/busobj/Issue.java',
-        'tt/busobj/JspPageDef.java',
-        'tt/busobj/Portfolio.java',
-        'tt/busobj/Practice.java',
-        'tt/busobj/Project.java',
-        'tt/busobj/PropertyNameCache.java',
-        'tt/busobj/Task.java',
-        'tt/busobj/TimesheetState.java',
-        'tt/busobj/TTBusObj.java',
-        'tt/busobj/TTBusObjId.java',
-        'tt/busobj/TTClob.java',
-        'tt/busobj/TTCustomer.java',
-        'tt/busobj/TTFilter.java',
-        'tt/busobj/TTObjectMethod.java',
-        'tt/busobj/User.java',
-        'tt/busobj/util/TTBusObjHelper.java',
-        'tt/constants/CustomerClass.java',
-        'tt/constants/Entity.java',
-        'tt/constants/FinanceSettings.java',
-        'tt/constants/Misc.java',
-        'tt/constants/Status.java',
-        'tt/jsp/popup/ValueRenderer.java',
-        'tt/jsp/report/Renderer.java',
-        'tt/jsp/obj/Filter.java',
-        'tt/htmlobj/Select.java',
-        'tt/jdbc/DbPool.java',
-        'tt/jsp/pageband/resource/ResourceCapacityHelper.java',
-        'tt/jsp/ttag/NoteThread.java',
-        'tt/mt/AbstractCapacityDemandDataProxy.java',
-        'tt/mt/AttachmentContentProxy.java',
-        'tt/mt/EntityMembershipProxy.java',
-        'tt/mt/FinanceSettingProxy.java',
-        'tt/mt/HumanResourceProxy.java',
-        'tt/mt/LobProxy.java',
-        'tt/mt/MTProxyAdapter.java',
-        'tt/mt/ProxyFactory.java',
-        'tt/mt/OfficeProxy.java',
-        'tt/mt/TTFilterProxy.java',
-        'tt/mt/TTCustomerProxy.java',
-        'tt/mt/TTCustomerProxyBase.java',
-        'tt/mt/UDFProxy.java',
-        'tt/mt/WorkCalendarCache.java',
-        'tt/mt/collections/IridizeAppMapBuilder.java',
-        'tt/mt/cache/ResultSetCache.java',
-        'tt/mt/logic/PALoginLogic.java',
-        'tt/util/ConfigUtils.java',
-        'tt/util/DataDictionary.java',
-        'tt/util/GraveBell.java',
-        'tt/util/ListHelper.java',
-        'tt/util/PermissionType.java',
-        'tt/util/STD.java',
-        'tt/util/StringHelper.java',
-        'tt/util/TTCustomerLocale.java',
-        'tt/util/TTDateUtils.java',
-        'tt/util/TTException.java',
-        'tt/util/TTLocaleInfo.java',
-        'tt/util/TTPermission.java',
-        'tt/util/TTThread.java',
-        'tt/util/sql/SQLLoader.java',
-        'tt/util/sql/SQLRunner.java'] as Set
-    classpath = configurations.compile
-    destinationDir = file("${project.buildDir}/classes/java/datapimp")
-    options.compilerArgs = ['-proc:none']
-}
 
 task createDatapimpJar(type: Jar) {
     description 'Create DataPimp jar'
@@ -350,22 +223,7 @@ task createDatapimpJar(type: Jar) {
     }
 }
 
-task createGlobalDataProcessorJar(type: Jar) {
-    description 'Build Global Data Processor jar'
-    group 'AnnotationProcessor'
-    from sourceSets.globalDataProcessorJar.output
-    from {
-        configurations.globalDataProcessorJarDep.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    destinationDir = file("${project.buildDir}/tools")
-    archiveName 'global-data-processor.jar'
-}
-
 javadoc { failOnError false }
-
-task wrapper(type: Wrapper) { gradleVersion = '4.0' }
 
 task listJars(dependsOn: [
     'listCompileJars',
@@ -390,6 +248,18 @@ task listTestJars {
     }
 }
 
+task createMinefieldJar(type: Jar) {
+    description 'Minefield jar'
+    group 'build'
+    from sourceSets.minefieldJar.output
+    destinationDir = file("${project.buildDir}")
+    archiveName 'minefield.jar'
+    manifest {
+        attributes(
+                'Main-Class': 'com.gus.minefield.MinefieldApp'
+                )
+    }
+}
 
 test {
     jvmArgs "-Dapple.awt.UIElement=true"

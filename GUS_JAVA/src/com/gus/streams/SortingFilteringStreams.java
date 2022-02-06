@@ -52,9 +52,9 @@ public class SortingFilteringStreams {
 		});
 		System.out.println(" ");
 		System.out.println("Fruit by Count descending:");
-		fruitCount.entrySet().
-			stream().
-			sorted(Map.Entry.<String,Long>comparingByValue().reversed())    //by the highest count 3, 2, 1
+		fruitCount.entrySet()
+			.stream()
+			.sorted(Map.Entry.<String,Long>comparingByValue().reversed())    //by the highest count 3, 2, 1
 			.forEachOrdered(entry -> { System.out.println("Map.Entry. key:"+entry.getKey()+",value:"+entry.getValue()); });
 		//Map.Entry<String,Long>
 		System.out.println(" ");

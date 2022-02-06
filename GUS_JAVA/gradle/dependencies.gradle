@@ -90,27 +90,8 @@ dependencies {
     compile "com.google.auto.value:auto-value:${autoValueVersion}"
     compile group: 'com.google.code.geocoder-java', name: 'geocoder-java', version: '0.16'
     compile group: 'net.sf.dozer', name: 'dozer', version: '5.5.1'
-
+    compile "com.squareup:javapoet:${javapoetVersion}"
     
-
-    //
-    // PROCESSOR
-    //
-    processor "javax.annotation:javax.annotation-api:${javaxAnnotationVersion}"
-    processor("com.google.guava:guava:${guavaVersion}") {
-        exclude module: 'j2objc-annotations'
-    }
-    processor "com.google.auto.value:auto-value:${autoValueVersion}"
-    processor("com.google.dagger:dagger-producers:${daggerVersion}") {
-        exclude module: 'guava'
-        exclude module: 'jsr250-api'
-    }
-    processor("com.google.dagger:dagger-compiler:${daggerVersion}") {
-        exclude module: 'guava'
-        exclude module: 'jsr250-api'
-    }
-
-
     //
     // PROVIDED
     //
@@ -193,40 +174,6 @@ dependencies {
 
 
     perJvmTestCompile "org.jmockit:jmockit:${jmockitVersion}"
-
-    datapimp "com.amazonaws:aws-java-sdk-s3:${awsSdkVersion}"
-    datapimp "com.amazonaws:aws-java-sdk-route53:${awsSdkVersion}"
-    datapimp 'com.innotas:servlet:1.0.0'
-    datapimp "org.apache.commons:commons-lang3:${commonsLangVersion}"
-    datapimp "commons-logging:commons-logging:${commonsLoggingVersion}"
-    datapimp "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
-    datapimp "commons-codec:commons-codec:${commonsCodecVersion}"
-    datapimp("org.apache.httpcomponents:httpclient:${httpclientVersion}") {
-        exclude module: 'commons-codec'
-        exclude module: 'commons-logging'
-    }
-    datapimp "commons-io:commons-io:${commonsIoVersion}"
-    datapimp "joda-time:joda-time:${jodaTimeVersion}"
-    datapimp "xerces:xercesImpl:${xercesImplVersion}"
-    datapimp "com.google.guava:guava:${guavaVersion}"
-    datapimp "org.apache.commons:commons-text:${commonsTextVersion}"
-    datapimp("org.javassist:javassist:${javassistVersion}") { exclude module: 'junit' }
-    datapimp group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
-    datapimp "javax.inject:javax.inject:1"
-    datapimp("com.google.dagger:dagger:${daggerVersion}") {
-        exclude module: 'guava'
-    }
-    datapimp 'org.reflections:reflections:0.9.11'
-    datapimp "org.json:json:${orgJsonVersion}"
-    datapimp("net.sf.mpxj:mpxj:${mpxjVersion}") {
-        exclude module: 'poi'
-        exclude module: 'junit'
-        exclude module: 'sqlite-jdbc'
-    }
-
-    globalDataProcessorJarDep("com.google.guava:guava:${guavaVersion}") {
-        exclude module: 'j2objc-annotations'
-    }
 
     cucumber "info.cukes:cucumber-picocontainer:${cucumberVersion}"
 
